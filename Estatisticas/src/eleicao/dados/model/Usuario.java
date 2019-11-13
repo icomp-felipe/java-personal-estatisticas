@@ -1,7 +1,7 @@
 package eleicao.dados.model;
 
-/** Classe Usuario - representa um usu·rio do sistema
- *  @author Felipe AndrÈ Souza da Silva 
+/** Classe Usuario - representa um usu√°rio do sistema
+ *  @author Felipe Andr√© Souza da Silva 
  *  @version 1.00, 10/09/2014 */
 public class Usuario {
 
@@ -19,7 +19,7 @@ public class Usuario {
 		return "SELECT * FROM USUARIO WHERE USER_LOGIN_PK='" + login + "' AND USER_PASSWORD=PASSWORD('" + senha + "')";
 	}
 	
-	/** Recupera uma string de atualizaÁ„o de senha no banco de dados */
+	/** Recupera uma string de atualiza√ß√£o de senha no banco de dados */
 	public String getUpdateString() {
 		return "UPDATE USUARIO SET USER_PASSWORD=PASSWORD('" + senha + "') WHERE USER_LOGIN_PK='" + login + "'";
 	}

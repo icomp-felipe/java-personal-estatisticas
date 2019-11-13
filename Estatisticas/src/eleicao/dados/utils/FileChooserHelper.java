@@ -5,30 +5,30 @@ import java.io.File;
 import javax.swing.*;
 import javax.swing.filechooser.*;
 
-/** Encapsula as operações de abertura e fechamento de arquivo do Swing
- *  @author Felipe André
+/** Encapsula as operaÃ§Ãµes de abertura e fechamento de arquivo do Swing
+ *  @author Felipe AndrÃ©
  *  @version 1.0, 02/08/2015 */
 public class FileChooserHelper {
 	
-	/* Constantes úteis */
+	/* Constantes Ãºteis */
 	private static final String EXTENSION = "ebp";
 	private static final String DOT_EXTENSION = "." + EXTENSION;
 	private static final File DIRECTORY = getUserHome();
 	
-	/** Retorna o diretório do usuário */
+	/** Retorna o diretÃ³rio do usuÃ¡rio */
 	private static File getUserHome() {
 		return new File(System.getProperty("user.home"));
 	}
 	
-	/** Exibe um diálogo de escolha de arquivos */
+	/** Exibe um diÃ¡logo de escolha de arquivos */
 	public static File dialog(Component context, boolean salvar) {
 		JFileChooser chooser = new JFileChooser();
 		
 		chooser.setDialogTitle("Selecione a planilha");
 		chooser.setCurrentDirectory(DIRECTORY);
-		chooser.addChoosableFileFilter(new FileNameExtensionFilter("Planilha do Excel (*" + DOT_EXTENSION + ")", EXTENSION)); // Define o filtro de seleção.
+		chooser.addChoosableFileFilter(new FileNameExtensionFilter("Planilha do Excel (*" + DOT_EXTENSION + ")", EXTENSION)); // Define o filtro de seleÃ§Ã£o.
 		chooser.setAcceptAllFileFilterUsed(false);
-		chooser.setMultiSelectionEnabled(false);	// Impede seleções múltiplas
+		chooser.setMultiSelectionEnabled(false);	// Impede seleÃ§Ãµes mÃºltiplas
 		
 		int resultado;
 		
@@ -48,7 +48,7 @@ public class FileChooserHelper {
 	    File novo = new File(filename);
 	    
 	    if (novo.exists() && salvar) {
-	    	int res = JOptionPane.showConfirmDialog(context,"O arquivo \"" + novo.getName() + "\" já existe!\nDeseja sobrescrevê-lo?");
+	    	int res = JOptionPane.showConfirmDialog(context,"O arquivo \"" + novo.getName() + "\" jÃ¡ existe!\nDeseja sobrescrevÃª-lo?");
 	    	
 	    	return (res == JOptionPane.OK_OPTION) ? novo : null;
 	    }

@@ -6,8 +6,8 @@ import java.awt.event.*;
 import eleicao.dados.model.*;
 import eleicao.dados.utils.*;
 
-/** Classe TelaMudaSenha - contÈm um di·logo de troca de senha do sistema
- *  @author Felipe AndrÈ Souza da Silva 
+/** Classe TelaMudaSenha - cont√©m um di√°logo de troca de senha do sistema
+ *  @author Felipe Andr√© Souza da Silva 
  *  @version 2.00, 12/09/2014 */
 public class TelaMudaSenha extends JFrame implements ActionListener {
 
@@ -15,9 +15,9 @@ public class TelaMudaSenha extends JFrame implements ActionListener {
 	private JButton botaoSalvar, botaoSair;
 	private JPasswordField textSenhaOnce, textSenhaTwice;
 	
-	/** ConstrÛi a janela gr·fica */
+	/** Constr√≥i a janela gr√°fica */
 	public TelaMudaSenha() {
-		super("AtualizaÁ„o de Senha");
+		super("Atualiza√ß√£o de Senha");
 		
 		Font  fonte = GraphicsHelper.getFont();
 		Color color = GraphicsHelper.getColor();
@@ -48,7 +48,7 @@ public class TelaMudaSenha extends JFrame implements ActionListener {
 		textSenhaTwice.setFont(fonte);
 		textSenhaTwice.setForeground(color);
 		textSenhaTwice.setBounds(12, 30, 248, 20);
-		textSenhaTwice.addKeyListener(new KeyAdapter() {    /** Adiciona uma aÁ„o quando o ENTER È pressionado */
+		textSenhaTwice.addKeyListener(new KeyAdapter() {    /** Adiciona uma a√ß√£o quando o ENTER √© pressionado */
 		      public void keyPressed(KeyEvent e) {
 			        if (e.getKeyCode() == KeyEvent.VK_ENTER)
 			        	botaoSalvar.doClick();
@@ -79,7 +79,7 @@ public class TelaMudaSenha extends JFrame implements ActionListener {
 			dispose();
 		}
 		else
-			AlertDialog.erro("Senhas n„o conferem!");
+			AlertDialog.erro("Senhas n√£o conferem!");
 	}
 
 	@Override

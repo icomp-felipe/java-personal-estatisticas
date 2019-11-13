@@ -5,8 +5,8 @@ import javax.swing.JOptionPane;
 
 import eleicao.dados.utils.AlertDialog;
 
-/** Classe ObjetoDAO - faz a ponte entre as classes de usu·rios Java e os objetos do banco de dados
- *  @author Felipe AndrÈ Souza da Silva 
+/** Classe ObjetoDAO - faz a ponte entre as classes de usu√°rios Java e os objetos do banco de dados
+ *  @author Felipe Andr√© Souza da Silva 
  *  @version 1.00, 10/09/2014 */
 public class UsuarioDAO extends BancoSQL {
 	
@@ -31,7 +31,7 @@ public class UsuarioDAO extends BancoSQL {
 		return username;
 	}
 
-	/** Atualiza a senha do usu·rio no sistema */
+	/** Atualiza a senha do usu√°rio no sistema */
 	public static void changePassword(String newPassword) {
 		conecta();
 		
@@ -49,7 +49,7 @@ public class UsuarioDAO extends BancoSQL {
 		}
 	}
 
-	/** Troca o nome do usu·rio no sistema */
+	/** Troca o nome do usu√°rio no sistema */
 	public static void changeLogin() {
 		
 		String newLogin = JOptionPane.showInputDialog("Digite o novo login");

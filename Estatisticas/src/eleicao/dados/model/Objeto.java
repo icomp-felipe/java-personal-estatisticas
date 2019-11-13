@@ -5,7 +5,7 @@ import java.text.*;
 import java.util.*;
 
 /** Classe Objeto - representa o objeto principal do sistema
- *  @author Felipe André Souza da Silva 
+ *  @author Felipe AndrÃ© Souza da Silva 
  *  @version 1.00, 10/09/2014 */
 public class Objeto implements Serializable {
 	
@@ -42,19 +42,19 @@ public class Objeto implements Serializable {
 		this(cpf,null,null,null,null,null,null,null,null,null,null,null,null,null);
 	}
 	
-	/** Construtor utilizado para recuperar apenas as informações pertinentes à tabela de visualização */
+	/** Construtor utilizado para recuperar apenas as informaÃ§Ãµes pertinentes Ã  tabela de visualizaÃ§Ã£o */
 	public Objeto(String cpf, String nome, String logradouro, String numCasa, String bairro, String tel01, String tel02) {
 		this(cpf,nome,null,logradouro,null,numCasa,bairro,null,null,null,tel01,tel02,null,null);
 	}
 	
 	/************************* Bloco de Getters Personalizados ***********************************/
 
-	/** Recupera o endereço completo */
+	/** Recupera o endereÃ§o completo */
 	public String getEndereco() {
 		return String.format("%s, %s, %s",logradouro,numCasa,bairro);
 	}
 	
-	/** Recupera o CPF com a máscara convencional */
+	/** Recupera o CPF com a mÃ¡scara convencional */
 	private String getFormattedCPF() {
 		try {
 			return String.format("%s.%s.%s-%s",cpf.substring(0, 3),cpf.substring(3, 6),cpf.substring(6, 9),cpf.substring(9, 11));
@@ -64,8 +64,8 @@ public class Objeto implements Serializable {
 		}
 	}
 	
-	/** Recupera o número de telefone com as máscaras convencionais
-	 *  para residenciais (10 dígitos) e celulares (11 dígitos) */
+	/** Recupera o nÃºmero de telefone com as mÃ¡scaras convencionais
+	 *  para residenciais (10 dÃ­gitos) e celulares (11 dÃ­gitos) */
 	private String getFormattedFone(String fone) {
 		
 		final String format = "(%s) %s-%s";
@@ -79,12 +79,12 @@ public class Objeto implements Serializable {
 		return fone;
 	}
 	
-	/** Recupera apenas as informações pertinentes à tabela de visualizações (busca de objeto) */
+	/** Recupera apenas as informaÃ§Ãµes pertinentes Ã  tabela de visualizaÃ§Ãµes (busca de objeto) */
 	public String[] getRowResume() {
 		return resume(nome,getFormattedCPF(),getEndereco(),getFormattedFone(tel01),getFormattedFone(tel02));
 	}
 	
-	/************************* Bloco de Métodos Auxiliares à Classe ******************************/
+	/************************* Bloco de MÃ©todos Auxiliares Ã  Classe ******************************/
 	
 	/** Agrupa os argumentos do tipo String em um vetor */
 	private String[] resume(String... args) {
@@ -130,14 +130,14 @@ public class Objeto implements Serializable {
         return formato.format(resultdate);
 	}
 	
-	/** Recupera o horário atual do sistema para esta classe */
+	/** Recupera o horÃ¡rio atual do sistema para esta classe */
 	private void setCurrentDate() {
 		this.dtinsert = milisegundoPraData(System.currentTimeMillis());
 	}
 	
 	/**************************** Bloco de Interfaces SQL ****************************************/
 	
-	/** Monta e retorna uma string de inserção de dados no banco */
+	/** Monta e retorna uma string de inserÃ§Ã£o de dados no banco */
 	public String getInsertString() {
 
 		final String dataNascimento = parseMySQLDate(dtnasc);
@@ -148,7 +148,7 @@ public class Objeto implements Serializable {
 		return String.format(format,cpf,nome,dataNascimento,logradouro,complemento,numCasa,  bairro,cidade,uf,cep,tel01,tel02,email,descricao,dtinsert);
 	}
 	
-	/** Monta uma string de remoção de dados no banco */
+	/** Monta uma string de remoÃ§Ã£o de dados no banco */
 	public String getRemoveString() {
 		return String.format("DELETE FROM DADOS WHERE DADO_CPF_PK='%s';",cpf);
 	}

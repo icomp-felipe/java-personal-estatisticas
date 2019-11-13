@@ -5,22 +5,22 @@ import java.awt.datatransfer.*;
 import java.io.*;
 import javax.swing.*;
 
-/** Classe que contém métodos úteis de manipulação de telas de diálogo
- *  @author Felipe André
+/** Classe que contÃ©m mÃ©todos Ãºteis de manipulaÃ§Ã£o de telas de diÃ¡logo
+ *  @author Felipe AndrÃ©
  *  @version 2.5, 19/01/2015 */
 public class AlertDialog {
 	
-	/** Mostra uma mensagem de informação padrão */
+	/** Mostra uma mensagem de informaÃ§Ã£o padrÃ£o */
 	public static void informativo(String mensagem) {
-		informativo("Informação", mensagem);
+		informativo("InformaÃ§Ã£o", mensagem);
 	}
 	
-	/** Mostra uma mensagem de informação personalizada */
+	/** Mostra uma mensagem de informaÃ§Ã£o personalizada */
 	public static void informativo(String titulo, String mensagem) {
 		JOptionPane.showMessageDialog(null,mensagem,titulo,JOptionPane.INFORMATION_MESSAGE);
 	}
 	
-	/** Mostra uma mensagem de erro padrão */
+	/** Mostra uma mensagem de erro padrÃ£o */
 	public static void erro(String mensagem) {
 		erro("Tela de Erro",mensagem);
 	}
@@ -30,12 +30,12 @@ public class AlertDialog {
 		JOptionPane.showMessageDialog(null,mensagem,titulo,JOptionPane.ERROR_MESSAGE);
 	}
 	
-	/** Mostra uma janela de diálogo */
+	/** Mostra uma janela de diÃ¡logo */
 	public static int dialog(String mensagem) {
 		return JOptionPane.showConfirmDialog(null,mensagem);
 	}
 	
-	/** Cola um texto na área de transferência */
+	/** Cola um texto na Ã¡rea de transferÃªncia */
 	public static void pasteToClibpoard(String text) {
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         StringSelection selection = new StringSelection(text);
@@ -54,7 +54,7 @@ public class AlertDialog {
 		}
 	}
 	
-	/** Copia um texto da área de transferência */
+	/** Copia um texto da Ã¡rea de transferÃªncia */
 	public static String copyFromClipboard() {
 		String result = "";
 		Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();

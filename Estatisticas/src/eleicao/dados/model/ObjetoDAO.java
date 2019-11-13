@@ -8,11 +8,11 @@ import javax.swing.*;
 import eleicao.dados.utils.*;
 
 /** Classe ObjetoDAO - faz a ponte entre as classes de objetos Java e os objetos do banco de dados
- *  @author Felipe André Souza da Silva 
+ *  @author Felipe AndrÃ© Souza da Silva 
  *  @version 1.00, 10/09/2014 */
 public class ObjetoDAO extends BancoSQL {
 	
-	/************************* Bloco de Interfaces de Comunicação ********************************/
+	/************************* Bloco de Interfaces de ComunicaÃ§Ã£o ********************************/
 	
 	/** Adiciona um objeto no banco de dados */
 	public static boolean adicionaObjeto(Objeto objeto) {
@@ -25,10 +25,10 @@ public class ObjetoDAO extends BancoSQL {
 			status = true;
 		}
 		catch (SQLIntegrityConstraintViolationException exception) {
-			AlertDialog.erro("Cadastro de Informações","CPF informado já existe na base de dados!");
+			AlertDialog.erro("Cadastro de InformaÃ§Ãµes","CPF informado jÃ¡ existe na base de dados!");
 		}
 		catch (SQLException exception) {
-			AlertDialog.erro("Cadastro de Informações",exception.getMessage());
+			AlertDialog.erro("Cadastro de InformaÃ§Ãµes",exception.getMessage());
 		}
 		finally {
 			desconecta();
@@ -174,7 +174,7 @@ public class ObjetoDAO extends BancoSQL {
 		restauraBackup(listaObjetos);
 	}
 	
-	/************************** Bloco de Métodos Auxiliares às Interfaces ************************/
+	/************************** Bloco de MÃ©todos Auxiliares Ã s Interfaces ************************/
 	
 	/** Retorna a lista de objetos do sistema de acordo com um determinado filtro */
 	public static ArrayList<Objeto> getObjetos(String query, Filtro filter) {
@@ -199,7 +199,7 @@ public class ObjetoDAO extends BancoSQL {
 		return entradas;
 	}
 	
-	/** Retorna a striing persolanizada de busca de acordo com o filtro selecionado na interface gráfica */
+	/** Retorna a striing persolanizada de busca de acordo com o filtro selecionado na interface grÃ¡fica */
 	private static String getSQLQuery(String field, Filtro filter) {
 		String format = "SELECT DADO_CPF_PK, DADO_NOME, DADO_LOGRADOURO, DADO_NUM_CASA, "
 					  + "DADO_BAIRRO, DADO_TEL01, DADO_TEL02 FROM DADOS WHERE %s LIKE \"%%%s%%\";";

@@ -9,8 +9,8 @@ import org.jsoup.select.*;
 import eleicao.dados.model.*;
 import eleicao.dados.utils.*;
 
-/** Classe TelaCadastro - contém a interface de cadastro de informações no sistema
- *  @author Felipe André Souza da Silva 
+/** Classe TelaCadastro - contÃ©m a interface de cadastro de informaÃ§Ãµes no sistema
+ *  @author Felipe AndrÃ© Souza da Silva 
  *  @version 2.00, 16/09/2014 */
 public class TelaCadastroEdicao extends JFrame implements ActionListener {
 
@@ -24,9 +24,9 @@ public class TelaCadastroEdicao extends JFrame implements ActionListener {
 	private boolean frameConsulta = false;
 	private JPanel painelDados, painelObs, painelEndereco;
 
-	/** Construtor da tela de edição - carrega os dados de um objeto para a interface */
+	/** Construtor da tela de ediÃ§Ã£o - carrega os dados de um objeto para a interface */
 	public TelaCadastroEdicao(Objeto objeto) {
-		this("Consulta/Edição");
+		this("Consulta/EdiÃ§Ã£o");
 		
 		velho = objeto;
 		frameConsulta = true;
@@ -52,7 +52,7 @@ public class TelaCadastroEdicao extends JFrame implements ActionListener {
 		textCPF.requestFocus();
 	}
 	
-	/** Construtor da tela de cadastro - cria uma interface de cadastro de informações
+	/** Construtor da tela de cadastro - cria uma interface de cadastro de informaÃ§Ãµes
 	 *  @wbp.parser.constructor */
 	public TelaCadastroEdicao(String usuario) {
 		super("Tela de Cadastro: " + usuario);
@@ -146,7 +146,7 @@ public class TelaCadastroEdicao extends JFrame implements ActionListener {
 		painelDados.add(textNasc);
 		
 		painelEndereco = new JPanel();
-		painelEndereco.setBorder(GraphicsHelper.getTitledBorder("Endereço"));
+		painelEndereco.setBorder(GraphicsHelper.getTitledBorder("EndereÃ§o"));
 		painelEndereco.setBounds(12, 145, 692, 121);
 		getContentPane().add(painelEndereco);
 		painelEndereco.setLayout(null);
@@ -163,7 +163,7 @@ public class TelaCadastroEdicao extends JFrame implements ActionListener {
 		painelEndereco.add(textLogradouro);
 		textLogradouro.setColumns(10);
 		
-		JLabel labelNumero = new JLabel("Número:");
+		JLabel labelNumero = new JLabel("NÃºmero:");
 		labelNumero.setFont(fonte);
 		labelNumero.setBounds(543, 25, 91, 19);
 		painelEndereco.add(labelNumero);
@@ -240,7 +240,7 @@ public class TelaCadastroEdicao extends JFrame implements ActionListener {
 		painelEndereco.add(botaoConsultar);
 		
 		painelObs = new JPanel();
-		painelObs.setBorder(GraphicsHelper.getTitledBorder("Observações"));
+		painelObs.setBorder(GraphicsHelper.getTitledBorder("ObservaÃ§Ãµes"));
 		painelObs.setBounds(12, 278, 692, 127);
 		getContentPane().add(painelObs);
 		painelObs.setLayout(null);
@@ -266,7 +266,7 @@ public class TelaCadastroEdicao extends JFrame implements ActionListener {
 		setVisible(true);
 	}
 
-	/********************* Bloco de Funcionalidades da Interface Gráfica *************************/
+	/********************* Bloco de Funcionalidades da Interface GrÃ¡fica *************************/
 	
 	/** Inicia a consulta de CEP */
 	private void consultar() {
@@ -288,7 +288,7 @@ public class TelaCadastroEdicao extends JFrame implements ActionListener {
 		textNome.requestFocus();
 	}
 	
-	/** Salva as informações da interface no banco de dados */
+	/** Salva as informaÃ§Ãµes da interface no banco de dados */
 	private void salvar() {
 		try {
 			boolean status;
@@ -308,18 +308,18 @@ public class TelaCadastroEdicao extends JFrame implements ActionListener {
 			}
 			
 			if (status)
-				AlertDialog.informativo("Informações"+middle+"com sucesso!");
+				AlertDialog.informativo("InformaÃ§Ãµes"+middle+"com sucesso!");
 			else
-				AlertDialog.erro("Falha ao cadastrar informações!");
+				AlertDialog.erro("Falha ao cadastrar informaÃ§Ãµes!");
 		}
 		catch (Exception exception) {
-			AlertDialog.erro("Falha ao salvar dados!\nVerifique se todos os campos estão preenchidos corretamente!");
+			AlertDialog.erro("Falha ao salvar dados!\nVerifique se todos os campos estÃ£o preenchidos corretamente!");
 		}
 	}
 	
-	/******************** Métodos Auxiliares ao Controle das Funções *****************************/
+	/******************** MÃ©todos Auxiliares ao Controle das FunÃ§Ãµes *****************************/
 	
-	/** Recupera as informações da interface para o objeto de dados do sistema */
+	/** Recupera as informaÃ§Ãµes da interface para o objeto de dados do sistema */
 	private Objeto getScreenData() throws Exception {
 		String cpf = "", tel1 = "", tel2 = "", nasc = "", cep = "";
 		
@@ -348,13 +348,13 @@ public class TelaCadastroEdicao extends JFrame implements ActionListener {
 		try { nasc = textNasc.getText(); }
 		catch (Exception exception) { }
 		
-		if (!CPFParser.parse(cpf)) { AlertDialog.erro("Digite um CPF válido!"); return null; }
+		if (!CPFParser.parse(cpf)) { AlertDialog.erro("Digite um CPF vÃ¡lido!"); return null; }
 		
 		Objeto objeto = new Objeto(cpf, nome, nasc, logra, compl, numer, bairro, cidade, uf, cep, tel1, tel2, email, obsvs);
 		return objeto;
 	}
 	
-	/** Limpa os campos de texto de determinado painel de componentes gráficos */
+	/** Limpa os campos de texto de determinado painel de componentes grÃ¡ficos */
 	private void limpaCampos(JPanel painel) {
 		for (int i=0; i< painel.getComponentCount(); i++) {
 			if (painel.getComponent(i) instanceof JTextField) {
@@ -372,12 +372,12 @@ public class TelaCadastroEdicao extends JFrame implements ActionListener {
 	private void start() {
 		String CEP = "";
 		try { CEP = textCEP.getValue().toString(); }
-		catch (Exception exception) { AlertDialog.erro("Digite um CEP válido!"); }
+		catch (Exception exception) { AlertDialog.erro("Digite um CEP vÃ¡lido!"); }
 		if (CEP.equals("")) return;
 		getEnderecoCompleto(CEP);
 	}
 	
-	/** Recupera da internet o endereço completo com base em determinado CEP */
+	/** Recupera da internet o endereÃ§o completo com base em determinado CEP */
 	private void getEnderecoCompleto(String CEP) {
 		try {
 			Document doc = Jsoup.connect("http://www.qualocep.com/busca-cep/" + CEP).timeout(120000).get();
@@ -394,7 +394,7 @@ public class TelaCadastroEdicao extends JFrame implements ActionListener {
 			textUF.setText(estado);
 		}
 		catch (Exception exception) {
-			AlertDialog.erro("Não foi possível recuperar o endereço!\nVerifique sua conexão com a Internet");
+			AlertDialog.erro("NÃ£o foi possÃ­vel recuperar o endereÃ§o!\nVerifique sua conexÃ£o com a Internet");
 		}
 	}
 	

@@ -1,7 +1,7 @@
 package eleicao.dados.model;
 
-/** Enum Filtro - contém as constantes de definição dos filtros e campos de dados do sistema
- *  @author Felipe André Souza da Silva 
+/** Enum Filtro - contÃ©m as constantes de definiÃ§Ã£o dos filtros e campos de dados do sistema
+ *  @author Felipe AndrÃ© Souza da Silva 
  *  @version 1.00, 10/09/2014 */
 public enum Filtro {
 

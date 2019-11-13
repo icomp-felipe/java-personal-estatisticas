@@ -2,8 +2,8 @@ package eleicao.dados.utils;
 
 import java.util.InputMismatchException;
 
-/** Implementa o algoritmo de verificaÁ„o de CPF.
- *  @author  Felipe AndrÈ Souza
+/** Implementa o algoritmo de verifica√ß√£o de CPF.
+ *  @author  Felipe Andr√© Souza
  *  @version 1.5, 30/08/2015 */
 public class CPFParser {
 
@@ -13,7 +13,7 @@ public class CPFParser {
 	private static final int TENTH 	  = 0xA;
 	private static final int ELEVENTH = 0xB;
 	
-	/** Verifica os absurdos de CPF inv·lidoss */
+	/** Verifica os absurdos de CPF inv√°lidoss */
 	private static boolean verificaAbsurdos(String CPF) {
 		if (CPF.equals("00000000000") || CPF.equals("11111111111") ||
 		    CPF.equals("22222222222") || CPF.equals("33333333333") ||
@@ -25,7 +25,7 @@ public class CPFParser {
 		return false;
 	}
 	
-	/** Verifica se um n˙mero de CPF È v·lido */
+	/** Verifica se um n√∫mero de CPF √© v√°lido */
 	public static boolean parse(String CPF) {
 		
 		if (verificaAbsurdos(CPF))

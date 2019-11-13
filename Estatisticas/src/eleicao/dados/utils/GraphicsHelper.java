@@ -5,17 +5,17 @@ import java.io.*;
 import javax.swing.border.*;
 import javax.swing.text.*;
 
-/** Classe que contém métodos úteis de manipulação de GUI
- *  @author Felipe André
+/** Classe que contÃ©m mÃ©todos Ãºteis de manipulaÃ§Ã£o de GUI
+ *  @author Felipe AndrÃ©
  *  @version 2.5, 19/01/2015 */
 public class GraphicsHelper {
 	
-	/** Atributos de criação de fonte */
+	/** Atributos de criaÃ§Ã£o de fonte */
 	private static final File ttfFont  = new File(ResourceManager.getResource("fonts/swiss.ttf"));
 	private static final Font baseFont = createFont(ttfFont);
 	private static final Font normFont = deriveFont(baseFont, Font.PLAIN, 15);
 	
-	/** Recursos gráficos */
+	/** Recursos grÃ¡ficos */
 	private static final Color color = new Color(31,96,203);
 	
 	/** Retorna a fonte atual */
@@ -33,17 +33,17 @@ public class GraphicsHelper {
 		return color;
 	}
 	
-	/** Cria uma Borda Personalizada para os painéis do Java Swing e AWT */
+	/** Cria uma Borda Personalizada para os painÃ©is do Java Swing e AWT */
 	public static TitledBorder getTitledBorder(String title) {
 		return new TitledBorder(null, title, TitledBorder.LEADING, TitledBorder.TOP, getFont(), getColor());
 	}
 	
-	/** Cria uma Máscara Personalizada para os text fields do Java Swing */
+	/** Cria uma MÃ¡scara Personalizada para os text fields do Java Swing */
 	public static MaskFormatter getMascara(String mascara) {
 		return getMascara(mascara,' ');
 	}
 	
-	/** Cria uma Máscara Personalizada com preenchimento personalizado para os text fields do Java Swing */
+	/** Cria uma MÃ¡scara Personalizada com preenchimento personalizado para os text fields do Java Swing */
 	public static MaskFormatter getMascara(String mascara, char preenchimento) {
 		MaskFormatter formato = new MaskFormatter();
 		formato.setValueContainsLiteralCharacters(false);
@@ -63,7 +63,7 @@ public class GraphicsHelper {
 		catch (Exception exception) { return null; }
 	}
 	
-	/** Cria uma fonte personalizada a partir de uma já existente */
+	/** Cria uma fonte personalizada a partir de uma jÃ¡ existente */
 	public static Font deriveFont(Font arquivoFonte, int tipoFonte, int tamanho) {
 		try { return arquivoFonte.deriveFont(tipoFonte, (float) tamanho); }
 		catch (Exception exception) { return null; }

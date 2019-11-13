@@ -7,8 +7,8 @@ import java.awt.event.*;
 import eleicao.dados.model.*;
 import eleicao.dados.utils.*;
 
-/** Classe TelaInicial - contÈm a interface principal de acesso ‡s funcionalidades do sistema
- *  @author Felipe AndrÈ Souza da Silva 
+/** Classe TelaInicial - cont√©m a interface principal de acesso √†s funcionalidades do sistema
+ *  @author Felipe Andr√© Souza da Silva 
  *  @version 2.00, 15/09/2014 */
 public class TelaInicial extends JFrame implements ActionListener {
 	
@@ -19,9 +19,9 @@ public class TelaInicial extends JFrame implements ActionListener {
 	private PrintStream stderr;
 	private String username;
 
-	/** ConstrÛi a janela gr·fica */
+	/** Constr√≥i a janela gr√°fica */
 	public TelaInicial(String username) {
-		super("Sistema de ManipulaÁ„o de Dados");
+		super("Sistema de Manipula√ß√£o de Dados");
 		
 		this.username = username;
 		onCreateOptionsMenu();
@@ -35,16 +35,16 @@ public class TelaInicial extends JFrame implements ActionListener {
 		setVisible(true);
 	}
 	
-	/** Cria a barra de menu com todas as suas opÁıes */
+	/** Cria a barra de menu com todas as suas op√ß√µes */
 	private void onCreateOptionsMenu() {
 		JMenuBar menuBar = new JMenuBar();
 		  
-	 	/** InstanciaÁ„o dos menus */
+	 	/** Instancia√ß√£o dos menus */
         JMenu menuArquivo = new JMenu("Arquivo");
         JMenu menuBackups = new JMenu("Backups");
         JMenu menuAjudas  = new JMenu("Ajuda");
         
-        /** InstanciaÁ„o dos itens de menu */
+        /** Instancia√ß√£o dos itens de menu */
         arquivoCadastro = new JMenuItem("Cadastro de Dados");
         arquivoConsulta = new JMenuItem("Consulta de Dados");
         arquivoNome	    = new JMenuItem("Mudar login");
@@ -91,9 +91,9 @@ public class TelaInicial extends JFrame implements ActionListener {
         setJMenuBar(menuBar);
 	}
 
-	/********************* Bloco de Funcionalidades da Interface Gr·fica *************************/
+	/********************* Bloco de Funcionalidades da Interface Gr√°fica *************************/
 	
-	/** Abre um di·logo de troca de nome de usu·rio */
+	/** Abre um di√°logo de troca de nome de usu√°rio */
 	private void changeName() {
 		UsuarioDAO.changeLogin();
 	}
@@ -112,7 +112,7 @@ public class TelaInicial extends JFrame implements ActionListener {
 		File arquivo = FileChooserHelper.dialog(this,false);
 		
 		if (arquivo != null) {
-			int status = AlertDialog.dialog("VocÍ tem certeza que deseja restaurar a base de dados?\nTodos os dados ser„o sobrescritos!");
+			int status = AlertDialog.dialog("Voc√™ tem certeza que deseja restaurar a base de dados?\nTodos os dados ser√£o sobrescritos!");
 		
 			if (status == JFileChooser.APPROVE_OPTION) {
 				ObjetoDAO.restauraBackup(arquivo);
@@ -121,12 +121,12 @@ public class TelaInicial extends JFrame implements ActionListener {
 		}
 	}
 	
-	/** Exibe informaÁıes legais do software */
+	/** Exibe informa√ß√µes legais do software */
 	private void sobre() {
-		AlertDialog.informativo("Sistema de Gerenciamento de Dados\nvers„o 1.0");
+		AlertDialog.informativo("Sistema de Gerenciamento de Dados\nvers√£o 1.0");
 	}
 	
-	/******************** MÈtodos Auxiliares ao Controle das FunÁıes *****************************/
+	/******************** M√©todos Auxiliares ao Controle das Fun√ß√µes *****************************/
 	
 	/** Retorna a largura atual da tela em pixels */
 	private int getScreenWidth() {

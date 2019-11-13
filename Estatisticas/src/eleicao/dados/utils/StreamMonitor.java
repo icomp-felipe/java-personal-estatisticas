@@ -5,11 +5,11 @@ import java.util.*;
 import java.text.*;
 
 /** Classe que redireciona uma stream para um arquivo.
- *  @author Felipe André
+ *  @author Felipe AndrÃ©
  *  @version 2.0, 30/08/2015 */
 public class StreamMonitor extends OutputStream {
 
-	/** Arquivo de saída dos dados */
+	/** Arquivo de saÃ­da dos dados */
 	private File stackTraceFile;
 	private FileOutputStream outputStream;
 	
@@ -60,7 +60,7 @@ public class StreamMonitor extends OutputStream {
 		return dateFormat.format(date);
 	}
 
-	/** Recupera a string de separação de arquivos do S.O. */
+	/** Recupera a string de separaÃ§Ã£o de arquivos do S.O. */
 	private String getFileSeparator() {
 		return System.getProperty("file.separator");
 	}

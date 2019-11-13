@@ -9,8 +9,8 @@ import javax.swing.table.*;
 import eleicao.dados.model.*;
 import eleicao.dados.utils.*;
 
-/** Classe TelaBusca - implementa uma interface de busca de informações no banco de dados
- *  @author Felipe André Souza da Silva 
+/** Classe TelaBusca - implementa uma interface de busca de informaÃ§Ãµes no banco de dados
+ *  @author Felipe AndrÃ© Souza da Silva 
  *  @version 2.00, 20/09/2014 */
 public class TelaBusca extends JFrame implements DocumentListener, ActionListener {
 
@@ -22,10 +22,10 @@ public class TelaBusca extends JFrame implements DocumentListener, ActionListene
 	private JTable tableResultado;
 	private JPanel painelFiltro;
 	private String[][] dados;
-    private String[] colunas = new String []{"Nome","CPF","Endereço","Contato 1","Contato 2"};
+    private String[] colunas = new String []{"Nome","CPF","EndereÃ§o","Contato 1","Contato 2"};
 	private DefaultTableModel modelo = new DefaultTableModel(dados,colunas);
 
-	/** Inicia a tela de consulta de informações */
+	/** Inicia a tela de consulta de informaÃ§Ãµes */
 	public TelaBusca() {
 		super("Tela de Consultas");
 		
@@ -125,7 +125,7 @@ public class TelaBusca extends JFrame implements DocumentListener, ActionListene
 		atualizaTabela();
 	}
 	
-	/** Cria as opções de menu */
+	/** Cria as opÃ§Ãµes de menu */
 	private void onCreateOptionsPopupMenu() {
 		JPopupMenu popupMenu = new JPopupMenu();
 		
@@ -141,14 +141,14 @@ public class TelaBusca extends JFrame implements DocumentListener, ActionListene
         tableResultado.setComponentPopupMenu(popupMenu);
 	}
 	
-	/********************* Bloco de Funcionalidades da Interface Gráfica *************************/
+	/********************* Bloco de Funcionalidades da Interface GrÃ¡fica *************************/
 	
-	/** Método adiciona novas linhas à JTable */
+	/** MÃ©todo adiciona novas linhas Ã  JTable */
 	public void adicionaLinha(Objeto objeto) {
 		 modelo.addRow(objeto.getRowResume());  
 	}
 	
-	/** Método remove uma linha da JTable */
+	/** MÃ©todo remove uma linha da JTable */
 	public void removeLinhas() {
 		int rows = modelo.getRowCount();
 		for (int i=0; i<rows; i++) {
@@ -168,7 +168,7 @@ public class TelaBusca extends JFrame implements DocumentListener, ActionListene
 			adicionaLinha(novo);
 	}
 	
-	/** Retorna o botão atualmente selecionado na interface gráfica */
+	/** Retorna o botÃ£o atualmente selecionado na interface grÃ¡fica */
 	private JRadioButton getSelectedButton() {
 		for (Component component: painelFiltro.getComponents())
 			if (component instanceof JRadioButton)
@@ -183,7 +183,7 @@ public class TelaBusca extends JFrame implements DocumentListener, ActionListene
 		return Filtro.valueOf(button.getText());
 	}
 	
-	/** Atualiza a tabela de informações */
+	/** Atualiza a tabela de informaÃ§Ãµes */
 	private synchronized void textFieldEvent() {
 		atualizaTabela();
 	}
@@ -197,19 +197,19 @@ public class TelaBusca extends JFrame implements DocumentListener, ActionListene
 	private void excluir() {
 		try {
 			String cpf = getSelectedCPF();
-			int option = AlertDialog.dialog("Você tem certeza que deseja excluir a linha selecionada?");
+			int option = AlertDialog.dialog("VocÃª tem certeza que deseja excluir a linha selecionada?");
 			if (option != JFileChooser.APPROVE_OPTION)
 				return;
 			ObjetoDAO.removeObjeto(new Objeto(cpf));
-			AlertDialog.informativo("Linha excluída com sucesso!");
+			AlertDialog.informativo("Linha excluÃ­da com sucesso!");
 			atualizaTabela();
 		}
 		catch (ArrayIndexOutOfBoundsException exception) {
-			AlertDialog.erro("Seleção de Itens", "Selecione uma linha da tabela!");
+			AlertDialog.erro("SeleÃ§Ã£o de Itens", "Selecione uma linha da tabela!");
 		}
 	}
 
-	/** Exibe mais informações de uma entrada da tabela em uma janela dedicada */
+	/** Exibe mais informaÃ§Ãµes de uma entrada da tabela em uma janela dedicada */
 	private void expandir() {
 		try {
 			String cpf = getSelectedCPF();
@@ -218,7 +218,7 @@ public class TelaBusca extends JFrame implements DocumentListener, ActionListene
 				new TelaCadastroEdicao(objeto);
 		}
 		catch (ArrayIndexOutOfBoundsException exception) {
-			AlertDialog.erro("Seleção de Itens", "Selecione uma linha da tabela!");
+			AlertDialog.erro("SeleÃ§Ã£o de Itens", "Selecione uma linha da tabela!");
 		}
 	}
 
@@ -255,7 +255,7 @@ public class TelaBusca extends JFrame implements DocumentListener, ActionListene
 	/************************* Bloco de Classes Auxiliares ***************************************/
 	
 	/** Adiciona a funcionalidade de abrir o menu de popup de
-	 *  uma linha da JTable com o botão direito do mouse */
+	 *  uma linha da JTable com o botÃ£o direito do mouse */
 	private class TableMouseListener extends MouseAdapter {
 	     
 	    @Override

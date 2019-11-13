@@ -6,8 +6,8 @@ import java.awt.event.*;
 import eleicao.dados.model.*;
 import eleicao.dados.utils.*;
 
-/** Classe TelaLogin - cria um ambiente gr·fico para o usu·rio fazer login no sistema
- *  @author Felipe AndrÈ Souza da Silva 
+/** Classe TelaLogin - cria um ambiente gr√°fico para o usu√°rio fazer login no sistema
+ *  @author Felipe Andr√© Souza da Silva 
  *  @version 2.00, 12/09/2014 */
 public class TelaLogin extends JFrame implements ActionListener {
 
@@ -16,7 +16,12 @@ public class TelaLogin extends JFrame implements ActionListener {
 	private JButton botaoEntrar, botaoLimpar, botaoSair;
 	private JPasswordField textSenha;
 	
-	/** Construtor da classe TelaLogin - constrÛi a janela gr·fica */
+	/** Construtor da classe TelaLogin - Cria a janela */
+	public static void main(String[] args) {
+		new TelaLogin();
+	}
+	
+	/** Construtor da classe TelaLogin - constr√≥i a janela gr√°fica */
 	public TelaLogin() {
 		super("Tela de Login");
 		setResizable(false);
@@ -53,7 +58,7 @@ public class TelaLogin extends JFrame implements ActionListener {
 		textSenha.setForeground(color);
 		textSenha.setToolTipText("Digite aqui sua senha");
 		textSenha.setBounds(341, 134, 193, 24);
-		textSenha.addKeyListener(new KeyAdapter() {    /** Adiciona uma aÁ„o quando o ENTER È pressionado */
+		textSenha.addKeyListener(new KeyAdapter() {    /** Adiciona uma a√ß√£o quando o ENTER √© pressionado */
 		      public void keyPressed(KeyEvent e) {
 		        if (e.getKeyCode() == KeyEvent.VK_ENTER)
 		        	botaoEntrar.doClick();
@@ -87,7 +92,7 @@ public class TelaLogin extends JFrame implements ActionListener {
 		setVisible(true);
 	}
 	
-	/** FunÁ„o que realiza o login no sistema */
+	/** Fun√ß√£o que realiza o login no sistema */
 	private void tryLogin() {
 		String login = textLogin.getText();
 		String senha = new String(textSenha.getPassword());
@@ -96,7 +101,7 @@ public class TelaLogin extends JFrame implements ActionListener {
 		String user  = UsuarioDAO.tryLogin(usuario);
 		
 		if (user == null)
-			AlertDialog.erro("Usu·rio e/ou senha inv·lidos!");
+			AlertDialog.erro("Usu√°rio e/ou senha inv√°lidos!");
 		else {
 			parseCurrentKey(login,senha);
 			new TelaInicial(user);
@@ -104,26 +109,21 @@ public class TelaLogin extends JFrame implements ActionListener {
 		}
 	}
 	
-	/** Solicita a troca de senha caso esta ainda seja a padr„o */
+	/** Solicita a troca de senha caso esta ainda seja a padrÔøΩo */
 	private void parseCurrentKey(String login, String key) {
 		if (login.equals("admin") && key.equals("admin")) {
-			if (AlertDialog.dialog("… altamente recomend·vel que vocÍ troque sua senha\nDeseja fazer isso agora?") == 0)
+			if (AlertDialog.dialog("√â altamente recomend√°vel que voc√™ troque sua senha\nDeseja fazer isso agora?") == 0)
 				new TelaMudaSenha();
 		}
 	}
 	
-	/** MÈtodo para limpar os campos de texto da janela */
+	/** MÔøΩtodo para limpar os campos de texto da janela */
 	private void limpaCampos() {
 		textLogin.setText(null);
 		textSenha.setText(null);
 		textLogin.requestFocus();
 	}
 	
-	/** Construtor da classe TelaLogin - Cria a janela */
-	public static void main(String[] args) {
-		new TelaLogin();
-	}
-
 	@Override
 	public void actionPerformed(ActionEvent event) {
 		Object source = event.getSource();
