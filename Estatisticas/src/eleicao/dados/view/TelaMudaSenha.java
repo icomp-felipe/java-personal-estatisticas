@@ -3,34 +3,47 @@ package eleicao.dados.view;
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
+import com.phill.libs.*;
 import eleicao.dados.model.*;
-import eleicao.dados.utils.*;
 
 /** Classe TelaMudaSenha - contém um diálogo de troca de senha do sistema
  *  @author Felipe André Souza da Silva 
- *  @version 2.00, 12/09/2014 */
-public class TelaMudaSenha extends JFrame implements ActionListener {
+ *  @version 2.5, 11/09/2020 */
+public class TelaMudaSenha extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JButton botaoSalvar, botaoSair;
 	private JPasswordField textSenhaOnce, textSenhaTwice;
 	
+	public static void main(String[] args) {
+		new TelaMudaSenha();
+	}
+	
 	/** Constrói a janela gráfica */
 	public TelaMudaSenha() {
 		super("Atualização de Senha");
 		
-		Font  fonte = GraphicsHelper.getFont();
-		Color color = GraphicsHelper.getColor();
+		// Inicializando atributos gráficos
+		GraphicsHelper helper = GraphicsHelper.getInstance();
+		//GraphicsHelper.setFrameIcon(this,"img/logo.png");
+						
+		Dimension dimension = new Dimension(300,225);
+		JPanel    mainPanel = new JPaintedPanel("img/background.png",dimension);
+						
+		mainPanel.setLayout(null);
+		setContentPane(mainPanel);
+						
+		// Recuperando fontes e cores
+		Font  fonte = helper.getFont (  );
+		Color color = helper.getColor(  );
 		
-		setSize(300,225);
-		setLocationRelativeTo(null);
-		getContentPane().setLayout(null);
-		
+		// Declaração da janela gráfica
 		JPanel painelSenha = new JPanel();
-		painelSenha.setBorder(GraphicsHelper.getTitledBorder("Digite sua senha"));
+		painelSenha.setBorder(helper.getTitledBorder("Digite sua senha"));
 		painelSenha.setBounds(12, 12, 272, 61);
-		getContentPane().add(painelSenha);
 		painelSenha.setLayout(null);
+		painelSenha.setOpaque(false);
+		mainPanel.add(painelSenha);
 		
 		textSenhaOnce = new JPasswordField();
 		textSenhaOnce.setFont(fonte);
@@ -40,38 +53,42 @@ public class TelaMudaSenha extends JFrame implements ActionListener {
 		
 		JPanel painelConfirmaSenha = new JPanel();
 		painelConfirmaSenha.setLayout(null);
-		painelConfirmaSenha.setBorder(GraphicsHelper.getTitledBorder("Confirme sua senha"));
+		painelConfirmaSenha.setBorder(helper.getTitledBorder("Confirme sua senha"));
 		painelConfirmaSenha.setBounds(12, 85, 272, 61);
-		getContentPane().add(painelConfirmaSenha);
+		painelConfirmaSenha.setOpaque(false);
+		mainPanel.add(painelConfirmaSenha);
 		
 		textSenhaTwice = new JPasswordField();
 		textSenhaTwice.setFont(fonte);
 		textSenhaTwice.setForeground(color);
 		textSenhaTwice.setBounds(12, 30, 248, 20);
-		textSenhaTwice.addKeyListener(new KeyAdapter() {    /** Adiciona uma ação quando o ENTER é pressionado */
-		      public void keyPressed(KeyEvent e) {
-			        if (e.getKeyCode() == KeyEvent.VK_ENTER)
-			        	botaoSalvar.doClick();
-			      }
-		});
 		painelConfirmaSenha.add(textSenhaTwice);
 		
 		botaoSalvar = new JButton("Salvar");
-		botaoSalvar.addActionListener(this);
+		botaoSalvar.addActionListener((event) -> action_update_password());
 		botaoSalvar.setBounds(152, 158, 90, 25);
-		getContentPane().add(botaoSalvar);
+		mainPanel.add(botaoSalvar);
 		
 		botaoSair = new JButton("Sair");
-		botaoSair.addActionListener(this);
+		botaoSair.addActionListener((event) -> dispose());
 		botaoSair.setBounds(56, 158, 90, 25);
-		getContentPane().add(botaoSair);
+		mainPanel.add(botaoSair);
+		
+		KeyListener listener = (KeyboardAdapter) (event) -> { if (event.getKeyCode() == KeyEvent.VK_ENTER) botaoSalvar.doClick(); };
+		textSenhaTwice.addKeyListener(listener);
+		
+		setSize(dimension);
 		setResizable(false);
+	    setLocationRelativeTo(null);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		
 		setVisible(true);
 	}
 	
 	/** Verifica as senhas e as altera no banco de dados */
-	private void salvar() {
-		String keyOnce  = new String(textSenhaOnce.getPassword());
+	private void action_update_password() {
+		
+		String keyOnce  = new String(textSenhaOnce .getPassword());
 		String keyTwice = new String(textSenhaTwice.getPassword());
 		
 		if (keyOnce.equals(keyTwice)) {
@@ -80,14 +97,7 @@ public class TelaMudaSenha extends JFrame implements ActionListener {
 		}
 		else
 			AlertDialog.erro("Senhas não conferem!");
+		
 	}
 
-	@Override
-	public void actionPerformed(ActionEvent event) {
-		Object source = event.getSource();
-		if (source == botaoSalvar)
-			salvar();
-		else if (source == botaoSair)
-			dispose();
-	}
 }
