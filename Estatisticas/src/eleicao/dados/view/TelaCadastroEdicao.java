@@ -34,6 +34,10 @@ public class TelaCadastroEdicao extends JFrame implements ActionListener {
 	
 	private final ImageIcon loading = new ImageIcon(ResourceManager.getResource("img/loading.gif"));
 
+	public static void main(String[] args) {
+		new TelaCadastroEdicao();
+	}
+	
 	/** Construtor da tela de edição - carrega os dados de um objeto para a interface
 	 *  @wbp.parser.constructor */
 	public TelaCadastroEdicao(Objeto objeto) {
@@ -45,6 +49,12 @@ public class TelaCadastroEdicao extends JFrame implements ActionListener {
 		
 		Dimension dimension = new Dimension(720,480);
 		JPanel    mainPanel = new JPaintedPanel("img/background.png",dimension);
+		
+		Icon selectIcon = ResourceManager.getResizedIcon("icon/zoom.png",20,20);
+		
+		Icon exitIcon  = ResourceManager.getResizedIcon("icon/shutdown.png",20,20);
+		Icon clearIcon = ResourceManager.getResizedIcon("icon/clear.png",20,20);
+		Icon saveIcon  = ResourceManager.getResizedIcon("icon/save.png",20,20);
 				
 		mainPanel.setLayout(null);
 		setContentPane(mainPanel);
@@ -53,212 +63,233 @@ public class TelaCadastroEdicao extends JFrame implements ActionListener {
 		Font  fonte = helper.getFont ();
 		Color color = helper.getColor();
 		
-		// Declaração da janela gráfica
+		// Painel de Dados Pessoais
 		painelDados = new JPanel();
+		painelDados.setOpaque(false);
 		painelDados.setBorder(helper.getTitledBorder("Dados Pessoais"));
-		painelDados.setBounds(12, 12, 692, 121);
+		painelDados.setBounds(12, 12, 692, 125);
 		painelDados.setLayout(null);
 		mainPanel.add(painelDados);
 		
-		
-		
-		
-		
-		textObs = new JTextArea();
-		textObs.setLineWrap(true);
-		textObs.setFont(fonte);
-		textObs.setForeground(color);
-		
-		
-		
 		JLabel labelNome = new JLabel("Nome:");
+		labelNome.setHorizontalAlignment(JLabel.RIGHT);
 		labelNome.setFont(fonte);
-		labelNome.setBounds(12, 30, 70, 15);
+		labelNome.setBounds(12, 30, 50, 20);
 		painelDados.add(labelNome);
 		
 		textNome = new JTextField();
 		textNome.setFont(fonte);
 		textNome.setForeground(color);
-		textNome.setBounds(67, 29, 613, 20);
+		textNome.setBounds(70, 30, 610, 25);
 		painelDados.add(textNome);
 		textNome.setColumns(10);
 		
 		JLabel labelCPF = new JLabel("CPF:");
+		labelCPF.setHorizontalAlignment(JLabel.RIGHT);
 		labelCPF.setFont(fonte);
-		labelCPF.setBounds(12, 61, 70, 15);
+		labelCPF.setBounds(12, 60, 50, 20);
 		painelDados.add(labelCPF);
 		
 		textCPF = new JFormattedTextField(helper.getMascara("###.###.###-##"));
+		textCPF.setHorizontalAlignment(JFormattedTextField.CENTER);
 		textCPF.setFont(fonte);
 		textCPF.setForeground(color);
-		textCPF.setBounds(67, 58, 118, 20);
+		textCPF.setBounds(70, 60, 120, 25);
 		painelDados.add(textCPF);
 		
-		JLabel labelTelRes = new JLabel("Tel. Res.:");
+		JLabel labelTelRes = new JLabel("Tel. Fixo:");
+		labelTelRes.setHorizontalAlignment(JLabel.RIGHT);
 		labelTelRes.setFont(fonte);
-		labelTelRes.setBounds(229, 61, 70, 15);
+		labelTelRes.setBounds(250, 60, 70, 20);
 		painelDados.add(labelTelRes);
 		
 		textTelRes = new JFormattedTextField(helper.getMascara("(##) ####-####"));
+		textTelRes.setHorizontalAlignment(JFormattedTextField.CENTER);
 		textTelRes.setFont(fonte);
 		textTelRes.setForeground(color);
-		textTelRes.setBounds(309, 58, 124, 20);
+		textTelRes.setBounds(330, 60, 125, 25);
 		painelDados.add(textTelRes);
 		
 		JLabel labelTelCel = new JLabel("Tel. Cel.:");
+		labelTelCel.setHorizontalAlignment(JLabel.RIGHT);
 		labelTelCel.setFont(fonte);
-		labelTelCel.setBounds(464, 61, 70, 15);
+		labelTelCel.setBounds(465, 60, 65, 20);
 		painelDados.add(labelTelCel);
 		
 		textTelCel = new JFormattedTextField(helper.getMascara("(##) #####-####"));
+		textTelCel.setHorizontalAlignment(JFormattedTextField.CENTER);
 		textTelCel.setForeground(color);
 		textTelCel.setFont(fonte);
-		textTelCel.setBounds(539, 58, 141, 20);
+		textTelCel.setBounds(540, 60, 140, 25);
 		painelDados.add(textTelCel);
 		
-		JLabel labelEmail = new JLabel("Email:");
+		JLabel labelEmail = new JLabel("e-mail:");
+		labelEmail.setHorizontalAlignment(JLabel.RIGHT);
 		labelEmail.setFont(fonte);
-		labelEmail.setBounds(12, 90, 70, 15);
+		labelEmail.setBounds(12, 90, 50, 20);
 		painelDados.add(labelEmail);
 		
 		textEmail = new JTextField();
 		textEmail.setFont(fonte);
 		textEmail.setForeground(color);
-		textEmail.setBounds(67, 89, 366, 20);
+		textEmail.setBounds(70, 90, 385, 25);
 		painelDados.add(textEmail);
 		textEmail.setColumns(10);
 		
-		JLabel labelNasc = new JLabel("Data de Nascim.:");
+		JLabel labelNasc = new JLabel("Nascim.:");
+		labelNasc.setHorizontalAlignment(JLabel.RIGHT);
 		labelNasc.setFont(fonte);
-		labelNasc.setBounds(464, 90, 124, 15);
+		labelNasc.setBounds(465, 90, 65, 20);
 		painelDados.add(labelNasc);
 		
 		textNasc = new JFormattedTextField(helper.getMascara("##/##/####"));
+		textNasc.setHorizontalAlignment(JFormattedTextField.CENTER);
 		textNasc.setForeground(color);
 		textNasc.setFont(fonte);
-		textNasc.setBounds(590, 88, 90, 20);
+		textNasc.setBounds(540, 90, 140, 25);
 		painelDados.add(textNasc);
 		
+		// Painel de Endereço
 		painelEndereco = new JPanel();
+		painelEndereco.setOpaque(false);
 		painelEndereco.setBorder(helper.getTitledBorder("Endereço"));
-		painelEndereco.setBounds(12, 145, 692, 121);
-		mainPanel.add(painelEndereco);
+		painelEndereco.setBounds(12, 140, 692, 125);
 		painelEndereco.setLayout(null);
+		mainPanel.add(painelEndereco);
 		
-		JLabel labelLogradouro = new JLabel("Logradouro:");
+		JLabel labelLogradouro = new JLabel("Lograd.:");
 		labelLogradouro.setFont(fonte);
-		labelLogradouro.setBounds(12, 25, 107, 19);
+		labelLogradouro.setBounds(12, 30, 65, 20);
 		painelEndereco.add(labelLogradouro);
 		
 		textLogradouro = new JTextField();
 		textLogradouro.setFont(fonte);
 		textLogradouro.setForeground(color);
-		textLogradouro.setBounds(130, 26, 395, 20);
-		painelEndereco.add(textLogradouro);
+		textLogradouro.setBounds(75, 30, 475, 25);
 		textLogradouro.setColumns(10);
+		painelEndereco.add(textLogradouro);
 		
-		JLabel labelNumero = new JLabel("Número:");
+		JLabel labelNumero = new JLabel("Núm.:");
+		labelNumero.setHorizontalAlignment(JLabel.RIGHT);
 		labelNumero.setFont(fonte);
-		labelNumero.setBounds(543, 25, 91, 19);
+		labelNumero.setBounds(565, 30, 45, 20);
 		painelEndereco.add(labelNumero);
 		
 		textNumero = new JTextField();
+		textNumero.setHorizontalAlignment(JTextField.CENTER);
 		textNumero.setFont(fonte);
 		textNumero.setForeground(color);
-		textNumero.setBounds(618, 26, 62, 20);
-		painelEndereco.add(textNumero);
+		textNumero.setBounds(618, 30, 60, 25);
 		textNumero.setColumns(10);
+		painelEndereco.add(textNumero);
 		
 		JLabel labelBairro = new JLabel("Bairro:");
 		labelBairro.setFont(fonte);
-		labelBairro.setBounds(12, 56, 62, 16);
+		labelBairro.setBounds(12, 60, 65, 20);
 		painelEndereco.add(labelBairro);
 		
 		textBairro = new JTextField();
 		textBairro.setFont(fonte);
 		textBairro.setForeground(color);
-		textBairro.setBounds(130, 56, 251, 20);
-		painelEndereco.add(textBairro);
+		textBairro.setBounds(75, 60, 225, 25);
 		textBairro.setColumns(10);
+		painelEndereco.add(textBairro);
 		
 		JLabel labelCidade = new JLabel("Cidade:");
 		labelCidade.setFont(fonte);
-		labelCidade.setBounds(399, 57, 70, 15);
+		labelCidade.setBounds(310, 60, 70, 20);
 		painelEndereco.add(labelCidade);
 		
 		textCidade = new JTextField();
 		textCidade.setFont(fonte);
 		textCidade.setForeground(color);
 		textCidade.setColumns(10);
-		textCidade.setBounds(462, 56, 218, 20);
+		textCidade.setBounds(380, 60, 170, 25);
 		painelEndereco.add(textCidade);
 		
-		JLabel labelComplemento = new JLabel("Complemento:");
+		JLabel labelComplemento = new JLabel("Compl.:");
 		labelComplemento.setFont(fonte);
-		labelComplemento.setBounds(12, 87, 107, 15);
+		labelComplemento.setBounds(12, 90, 65, 20);
 		painelEndereco.add(labelComplemento);
 		
 		textComplemento = new JTextField();
 		textComplemento.setFont(fonte);
 		textComplemento.setForeground(color);
-		textComplemento.setBounds(130, 86, 177, 20);
-		painelEndereco.add(textComplemento);
+		textComplemento.setBounds(75, 90, 420, 25);
 		textComplemento.setColumns(10);
+		painelEndereco.add(textComplemento);
 		
 		JLabel labelUF = new JLabel("UF:");
+		labelUF.setHorizontalAlignment(JLabel.RIGHT);
 		labelUF.setFont(fonte);
-		labelUF.setBounds(320, 87, 34, 15);
+		labelUF.setBounds(565, 60, 45, 20);
 		painelEndereco.add(labelUF);
 		
 		textUF = new JTextField();
+		textUF.setHorizontalAlignment(JTextField.CENTER);
 		textUF.setFont(fonte);
 		textUF.setForeground(color);
-		textUF.setBounds(351, 86, 30, 19);
-		painelEndereco.add(textUF);
+		textUF.setBounds(618, 60, 60, 25);
 		textUF.setColumns(10);
+		painelEndereco.add(textUF);
 		
 		JLabel labelCEP = new JLabel("CEP:");
 		labelCEP.setFont(fonte);
-		labelCEP.setBounds(417, 87, 43, 15);
+		labelCEP.setBounds(505, 90, 40, 20);
 		painelEndereco.add(labelCEP);
 		
 		textCEP = new JFormattedTextField(helper.getMascara("##.###-###"));
+		textCEP.setHorizontalAlignment(JFormattedTextField.CENTER);
 		textCEP.setForeground(color);
 		textCEP.setFont(fonte);
-		textCEP.setBounds(462, 86, 90, 20);
+		textCEP.setBounds(550, 90, 90, 25);
 		painelEndereco.add(textCEP);
 		
-		botaoConsultar = new JButton("Consultar");
+		botaoConsultar = new JButton(selectIcon);
 		botaoConsultar.addActionListener(this);
-		botaoConsultar.setBounds(563, 86, 117, 19);
+		botaoConsultar.setToolTipText("Buscar CEP online");
+		botaoConsultar.setBounds(648, 90, 30, 25);
 		painelEndereco.add(botaoConsultar);
 		
+		// Painel de Observações
 		painelObs = new JPanel();
+		painelObs.setOpaque(false);
 		painelObs.setBorder(helper.getTitledBorder("Observações"));
-		painelObs.setBounds(12, 278, 692, 127);
-		mainPanel.add(painelObs);
+		painelObs.setBounds(12, 270, 692, 140);
 		painelObs.setLayout(null);
+		mainPanel.add(painelObs);
+		
+		textObs = new JTextArea();
+		textObs.setLineWrap(true);
+		textObs.setFont(fonte);
+		textObs.setForeground(color);
 		
 		JScrollPane scrollObs = new JScrollPane(textObs);
-		scrollObs.setBounds(12, 24, 668, 91);
+		scrollObs.setBounds(12, 24, 668, 104);
 		painelObs.add(scrollObs);
 		
-		botaoSair = new JButton("Sair");
-		botaoSair.addActionListener(this);
-		botaoSair.setBounds(426, 417, 85, 25);
+		botaoSair = new JButton(exitIcon);
+		botaoSair.setToolTipText("Sair do sistema");
+		botaoSair.addActionListener((event) -> dispose());
+		botaoSair.setBounds(590, 418, 30, 25);
 		mainPanel.add(botaoSair);
 		
-		botaoLimpar = new JButton("Limpar");
+		botaoLimpar = new JButton(clearIcon);
+		botaoLimpar.setToolTipText("Limpar dados da tela");
 		botaoLimpar.addActionListener(this);
-		botaoLimpar.setBounds(522, 417, 85, 25);
+		botaoLimpar.setBounds(632, 418, 30, 25);
 		mainPanel.add(botaoLimpar);
 		
-		botaoSalvar = new JButton("Salvar");
+		botaoSalvar = new JButton(saveIcon);
+		botaoSalvar.setToolTipText("Salvar dados");
 		botaoSalvar.addActionListener(this);
-		botaoSalvar.setBounds(619, 417, 85, 25);
+		botaoSalvar.setBounds(674, 418, 30, 25);
 		mainPanel.add(botaoSalvar);
 		
-		
+		JLabel textOBS = new JLabel();
+		textOBS.setFont(fonte);
+		textOBS.setBounds(12, 418, 560, 25);
+		mainPanel.add(textOBS);
 		
 		setSize(dimension);
 		setResizable(false);
@@ -269,6 +300,7 @@ public class TelaCadastroEdicao extends JFrame implements ActionListener {
 		
 		
 		
+		/*
 		
 		velho = objeto;
 		frameConsulta = true;
@@ -291,7 +323,7 @@ public class TelaCadastroEdicao extends JFrame implements ActionListener {
 		
 		textObs.setText(objeto.getDescricao());
 		
-		textCPF.requestFocus();
+		textCPF.requestFocus();*/
 	}
 	
 	public TelaCadastroEdicao() {
@@ -442,12 +474,9 @@ public class TelaCadastroEdicao extends JFrame implements ActionListener {
 		Object source = event.getSource();
 		if (source == botaoSalvar)
 			salvar();
-		else if ((source == botaoSair))
-			dispose();
 		else if (source == botaoLimpar)
 			limpar();
 		else if (source == botaoConsultar)
 			consultar();
 	}
-	
 }
