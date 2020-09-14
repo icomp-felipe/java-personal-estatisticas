@@ -1,42 +1,49 @@
 package eleicao.dados.view;
 
 import java.io.*;
+import java.sql.SQLException;
 import java.awt.*;
 import javax.swing.*;
-import java.awt.event.*;
+
+import com.phill.libs.FileChooserHelper;
+import com.phill.libs.gui.AlertDialog;
+
+import eleicao.dados.bd.Database;
 import eleicao.dados.model.*;
-import eleicao.dados.utils.*;
+import eleicao.dados.utils.StreamMonitor;
 
 /** Classe TelaInicial - contém a interface principal de acesso às funcionalidades do sistema
  *  @author Felipe André Souza da Silva 
  *  @version 2.00, 15/09/2014 */
-public class TelaInicial extends JFrame implements ActionListener {
+public class TelaInicial extends JFrame {
 	
 	private static final long serialVersionUID = 1L;
-	private JMenuItem arquivoConsulta, arquivoCadastro, arquivoSair, arquivoNome, arquivoSenha;
-	private JMenuItem backupCria, backupRestaura;
-	private JMenuItem ajudaSobre;
 	private PrintStream stderr;
-	private String username;
+	
+	private String login;
+	
+	private File lastSelectedDir = FileChooserHelper.HOME_DIRECTORY;
 
 	/** Constrói a janela gráfica */
-	public TelaInicial(String username) {
+	public TelaInicial(String login) {
 		super("Sistema de Manipulação de Dados");
 		
-		this.username = username;
+		this.login = login;
 		onCreateOptionsMenu();
 		
-		stderr = new PrintStream(new StreamMonitor()); 
+		//stderr = new PrintStream(new StreamMonitor()); 
 		System.setErr(stderr);
 		
 		setSize(getScreenWidth(),60);
 		setResizable(false);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		
 		setVisible(true);
 	}
 	
 	/** Cria a barra de menu com todas as suas opções */
 	private void onCreateOptionsMenu() {
+		
 		JMenuBar menuBar = new JMenuBar();
 		  
 	 	/** Instanciação dos menus */
@@ -44,43 +51,44 @@ public class TelaInicial extends JFrame implements ActionListener {
         JMenu menuBackups = new JMenu("Backups");
         JMenu menuAjudas  = new JMenu("Ajuda");
         
-        /** Instanciação dos itens de menu */
-        arquivoCadastro = new JMenuItem("Cadastro de Dados");
-        arquivoConsulta = new JMenuItem("Consulta de Dados");
-        arquivoNome	    = new JMenuItem("Mudar login");
-        arquivoSenha	= new JMenuItem("Mudar senha do sistema");
-        arquivoSair 	= new JMenuItem("Sair do Sistema");
+        // Menu Arquivo
+        JMenuItem itemArquivoCadastro = new JMenuItem("Cadastro de Dados");
+        itemArquivoCadastro.addActionListener((event) -> new TelaCadastroEdicao(this.login));
+        menuArquivo.add(itemArquivoCadastro);
         
-        backupCria 	   = new JMenuItem("Criar Backup");
-        backupRestaura = new JMenuItem("Restaurar Backup");
+        JMenuItem itemArquivoConsulta = new JMenuItem("Consulta de Dados");
+        itemArquivoConsulta.addActionListener((event) -> new TelaBusca());
+        menuArquivo.add(itemArquivoConsulta);
         
-        ajudaSobre   = new JMenuItem("Sobre");
-        
-        /** Adicionando itens ao Menu Arquivo */
-        menuArquivo.add(arquivoCadastro);
-        menuArquivo.add(arquivoConsulta);
         menuArquivo.add(new JSeparator());
-        menuArquivo.add(arquivoNome);
-        menuArquivo.add(arquivoSenha);
+        
+        JMenuItem  itemArquivoLogin = new JMenuItem("Mudar login");
+        itemArquivoLogin.addActionListener((event) -> action_login_change());
+        menuArquivo.add(itemArquivoLogin);
+        
+        JMenuItem itemArquivoSenha = new JMenuItem("Mudar senha do sistema");
+        itemArquivoSenha.addActionListener((event) -> new TelaMudaSenha());
+        menuArquivo.add(itemArquivoSenha);
+        
         menuArquivo.add(new JSeparator());
-        menuArquivo.add(arquivoSair);
         
-        menuBackups.add(backupCria);
-        menuBackups.add(backupRestaura);
+        JMenuItem itemArquivoSair = new JMenuItem("Sair do Sistema");
+        itemArquivoSair.addActionListener((event) -> dispose());
+        menuArquivo.add(itemArquivoSair);
         
-        menuAjudas.add(ajudaSobre);
+        // Menu Backups
+        JMenuItem itemBackupCria = new JMenuItem("Criar Backup");
+        itemBackupCria.addActionListener((event) -> action_backup_create());
+        menuBackups.add(itemBackupCria);
         
-        /** Adicionando eventos aos itens de menu */
-        arquivoCadastro.addActionListener(this);
-        arquivoConsulta.addActionListener(this);
-        arquivoNome.addActionListener(this);
-        arquivoSenha.addActionListener(this);
-        arquivoSair.addActionListener(this);
+        JMenuItem itemBackupRestaura = new JMenuItem("Restaurar Backup");
+        itemBackupRestaura.addActionListener((event) -> action_backup_restore());
+        menuBackups.add(itemBackupRestaura);
         
-        backupCria.addActionListener(this);
-        backupRestaura.addActionListener(this);
-        
-        ajudaSobre.addActionListener(this);
+        // Menu Ajuda
+        JMenuItem itemAjudaSobre = new JMenuItem("Sobre");
+        itemAjudaSobre.addActionListener((event) -> sobre());
+        menuAjudas.add(itemAjudaSobre);
         
         /** Adicionando os menus na barra de menu */
         menuBar.add(menuArquivo);
@@ -93,37 +101,144 @@ public class TelaInicial extends JFrame implements ActionListener {
 
 	/********************* Bloco de Funcionalidades da Interface Gráfica *************************/
 	
-	/** Abre um diálogo de troca de nome de usuário */
-	private void changeName() {
-		UsuarioDAO.changeLogin();
-	}
-	
-	/** Cria um backup com todos os dados do banco */
-	private void criaBackup() throws IOException {
-		File arquivo = FileChooserHelper.dialog(this,true);
-		if (arquivo != null) {
-			ObjetoDAO.criaBackup(arquivo);
-			AlertDialog.informativo("Backup criado com sucesso!");
-		}
-	}
-	
-	/** Restaura o backup para o banco de dados */
-	private void restauraBackup() throws IOException {
-		File arquivo = FileChooserHelper.dialog(this,false);
+	/** Implementação da tela de troca de login de usuário */
+	private void action_login_change() {
 		
-		if (arquivo != null) {
-			int status = AlertDialog.dialog("Você tem certeza que deseja restaurar a base de dados?\nTodos os dados serão sobrescritos!");
+		// Título das janelas de diálogo
+		final String title = "Trocando login";
 		
-			if (status == JFileChooser.APPROVE_OPTION) {
-				ObjetoDAO.restauraBackup(arquivo);
-				AlertDialog.informativo("Backup restaurado com sucesso!");
+		// Solicitando login atual do usuário
+		String currentLogin = AlertDialog.input(title, "Informe o login atual");
+		
+		// Se algum login foi informado...
+		if (currentLogin != null) {
+			
+			// ...aparo as pontas para evitar possíveis erros de entrada, ...
+			currentLogin = currentLogin.trim();
+			
+			// ...verifico o login informado com a cadastrado, ...
+			if (currentLogin.equals(this.login)) {
+				
+				// ...solicito o novo login, ...
+				String newLogin = AlertDialog.input(title, "Informe o novo login");
+				
+				// ...e, por fim, se o login for válido (não nulo), o atualizo na base de dados
+				if (newLogin != null) {
+					
+					// aparando as pontas do novo login
+					newLogin = newLogin.trim();
+					
+					if (newLogin.isEmpty())
+						AlertDialog.error(title, "Por favor, informe um login não vazio");
+					
+					else {
+						
+						try {
+							
+							UsuarioDAO.changeLogin(newLogin);	this.login = newLogin;
+							AlertDialog.info(title, "Login alterado com sucesso!");
+							
+						}
+						catch (SQLException exception) {
+							exception.printStackTrace();
+							AlertDialog.error(title, "Falha ao alterar login na base de dados");
+						}
+						
+					}
+					
+				}
+				
 			}
+			else
+				AlertDialog.error(title, "Login informado não confere com o cadastrado");
+			
 		}
+		
+	}
+	
+	/** Cria um backup com todos os dados do banco. */
+	private void action_backup_create() {
+		
+		// Título das janelas de diálogo
+		final String title = "Criando backup";
+		
+		// Recuperando arquivo de backup
+		final File bkp = FileChooserHelper.loadFile(this,Constants.FileTypes.EBP,"Selecione o arquivo de saída",true,lastSelectedDir);
+		
+		// Se algum arquivo foi escolhido...
+		if (bkp != null) {
+			
+			// ...guardo o endereço deste arquivo, para ser usado como sugestão em próximas seleções...
+			this.lastSelectedDir = bkp.getParentFile();
+			
+			// ...verifico se este arquivo pode ser escrito...
+			if (!bkp.canWrite()) {
+				
+				AlertDialog.error(title, "O arquivo que você escolheu está numa pasta que não pode ser escrita!\nFavor escolher outra pasta.");
+				return;
+				
+			}
+			
+			// ...e, por fim, crio o backup em arquivo
+			try {
+				
+				ObjetoDAO.criaBackup(bkp);
+				AlertDialog.info(title, "Backup criado com sucesso!");
+			
+			}
+			catch (IOException exception) {
+				
+				exception.printStackTrace();
+				AlertDialog.error(title, "Falha ao criar backup");
+			
+			}
+			
+		}
+		
+	}
+	
+	/** Restaura os dados do arquivo de backup para o banco de dados. */
+	private void action_backup_restore() {
+		
+		// Título das janelas de diálogo
+		final String title = "Restaurando backup";
+				
+		// Recuperando arquivo de backup
+		final File bkp = FileChooserHelper.loadFile(this,Constants.FileTypes.EBP,"Selecione o arquivo de backup",false,lastSelectedDir);
+		
+		// Se algum arquivo foi escolhido...
+		if (bkp != null) {
+					
+			// ...guardo o endereço deste arquivo, para ser usado como sugestão em próximas seleções...
+			this.lastSelectedDir = bkp.getParentFile();
+			
+			// ...exibo o diálogo de confirmação ao usuário e...
+			int choice = AlertDialog.dialog("Você tem certeza que deseja restaurar a base de dados?\nTodos os dados serão sobrescritos!");
+		
+			// ...se ele deseja prosseguir, o faço
+			if (choice == AlertDialog.OK_OPTION) {
+				
+				try {
+					
+					ObjetoDAO.restauraBackup(bkp);
+					AlertDialog.info(title, "Backup restaurado com sucesso!");
+					
+				} catch (IOException exception) {
+					
+					exception.printStackTrace();
+					AlertDialog.error(title, "Falha ao restaurar backup");
+					
+				}
+				
+			}
+			
+		}
+		
 	}
 	
 	/** Exibe informações legais do software */
 	private void sobre() {
-		AlertDialog.informativo("Sistema de Gerenciamento de Dados\nversão 1.0");
+		AlertDialog.info("Sobre", "Sistema de Gerenciamento de Dados\nversão 2.0");
 	}
 	
 	/******************** Métodos Auxiliares ao Controle das Funções *****************************/
@@ -135,31 +250,11 @@ public class TelaInicial extends JFrame implements ActionListener {
 	
 	@Override
 	public void dispose() {
-		super.dispose();
-		stderr.close();
+		
+		try { Database.INSTANCE.disconnect(); }
+		catch (SQLException exception) { }
+		finally { /*stderr.close();*/ super.dispose(); }
+		
 	}
 	
-	@Override
-	public void actionPerformed(ActionEvent event) {
-		Object source = event.getSource();
-		if (source == arquivoCadastro)
-			new TelaCadastroEdicao(username);
-		else if (source == arquivoConsulta)
-			new TelaBusca();
-		else if (source == arquivoNome)
-			changeName();
-		else if (source == arquivoSenha)
-			new TelaMudaSenha();
-		else if (source == arquivoSair)
-			dispose();
-		else if (source == backupCria)
-			try { criaBackup();	}
-			catch (IOException e) { e.printStackTrace(); }
-		else if (source == backupRestaura)
-			try { restauraBackup(); }
-			catch (Exception e) { e.printStackTrace(); }
-		else if (source == ajudaSobre)
-			sobre();
-	}
-
 }

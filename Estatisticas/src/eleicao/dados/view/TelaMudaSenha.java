@@ -12,7 +12,6 @@ import eleicao.dados.model.*;
 public class TelaMudaSenha extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	private JButton botaoSalvar, botaoSair;
 	private JPasswordField textSenhaOnce, textSenhaTwice;
 	
 	public static void main(String[] args) {
@@ -34,8 +33,8 @@ public class TelaMudaSenha extends JFrame {
 		setContentPane(mainPanel);
 						
 		// Recuperando fontes e cores
-		Font  fonte = helper.getFont (  );
-		Color color = helper.getColor(  );
+		Font  fonte = helper.getFont ();
+		Color color = helper.getColor();
 		
 		// Declaração da janela gráfica
 		JPanel painelSenha = new JPanel();
@@ -64,12 +63,12 @@ public class TelaMudaSenha extends JFrame {
 		textSenhaTwice.setBounds(12, 30, 248, 20);
 		painelConfirmaSenha.add(textSenhaTwice);
 		
-		botaoSalvar = new JButton("Salvar");
+		JButton botaoSalvar = new JButton("Salvar");
 		botaoSalvar.addActionListener((event) -> action_update_password());
 		botaoSalvar.setBounds(152, 158, 90, 25);
 		mainPanel.add(botaoSalvar);
 		
-		botaoSair = new JButton("Sair");
+		JButton botaoSair = new JButton("Sair");
 		botaoSair.addActionListener((event) -> dispose());
 		botaoSair.setBounds(56, 158, 90, 25);
 		mainPanel.add(botaoSair);
@@ -88,11 +87,11 @@ public class TelaMudaSenha extends JFrame {
 	/** Verifica as senhas e as altera no banco de dados */
 	private void action_update_password() {
 		
-		String keyOnce  = new String(textSenhaOnce .getPassword());
-		String keyTwice = new String(textSenhaTwice.getPassword());
+		String firstKey  = new String(textSenhaOnce .getPassword());
+		String secondKey = new String(textSenhaTwice.getPassword());
 		
-		if (keyOnce.equals(keyTwice)) {
-			UsuarioDAO.changePassword(keyTwice);
+		if (firstKey.equals(secondKey)) {
+			UsuarioDAO.changePassword(secondKey);
 			dispose();
 		}
 		else

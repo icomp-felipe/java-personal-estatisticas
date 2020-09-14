@@ -3,6 +3,7 @@ package eleicao.dados.model;
 import java.sql.*;
 import javax.swing.JOptionPane;
 
+import eleicao.dados.bd.Database;
 import eleicao.dados.utils.AlertDialog;
 
 /** Classe ObjetoDAO - faz a ponte entre as classes de usuários Java e os objetos do banco de dados
@@ -49,28 +50,20 @@ public class UsuarioDAO extends BancoSQL {
 		}
 	}
 
-	/** Troca o nome do usuário no sistema */
-	public static void changeLogin() {
+	/** Troca o login do sistema.
+	 *  @param newLogin - novo login
+	 *  @throws SQLException quando há alguma falha de conexão com o banco de dados */
+	public static void changeLogin(final String newLogin) throws SQLException {
 		
-		String newLogin = JOptionPane.showInputDialog("Digite o novo login");
-		if ((newLogin == null) || (newLogin.equals("")))
-			return;
+		String query = String.format("UPDATE USUARIO SET USER_LOGIN_PK=''",newLogin);
+		Connection c = Database.INSTANCE.getConnection();
+		Statement st = c.createStatement();
 		
-		conecta();
+		st.executeUpdate(query);
 		
-		try {
-			Statement st = getStatement();
-			st.executeUpdate("UPDATE USUARIO SET USER_LOGIN_PK='" + newLogin + "'");
-			AlertDialog.informativo("Login atualizado com sucesso!");
-		}
-		catch (SQLException exception) {
-			AlertDialog.erro("Falha ao trocar login\nVerifique a pasta de tracing!");
-			exception.printStackTrace();
-		}
-		finally {
-			desconecta();
-		}
-
+		st.close();
+		c .close();
+		
 	}
 	
 }

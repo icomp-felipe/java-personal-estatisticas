@@ -5,6 +5,7 @@ import java.sql.*;
 import java.util.*;
 import javax.swing.*;
 
+import eleicao.dados.bd.Database;
 import eleicao.dados.utils.*;
 
 /** Classe ObjetoDAO - faz a ponte entre as classes de objetos Java e os objetos do banco de dados
@@ -81,24 +82,25 @@ public class ObjetoDAO extends BancoSQL {
 	
 	/** Recupera todos os objetos do banco de dados */
 	public static ArrayList<Objeto> getObjetos() {
+		
 		ArrayList<Objeto> entradas = new ArrayList<Objeto>();
-		conecta();
 		
 		try {
+			Connection c = Database.INSTANCE.getConnection();
 	    	Statement st = getStatement();
 	    	ResultSet rs = st.executeQuery("SELECT * FROM DADOS");
 	    	while (rs.next()) {
 	    		Objeto entrada = new Objeto(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6),rs.getString(7),rs.getString(8),rs.getString(9),rs.getString(10),rs.getString(11),rs.getString(12),rs.getString(13),rs.getString(14));
 	    		entradas.add(entrada);
 	    		entrada = null;
-	    	}	
+	    	}
+	    	
+	    	st.close();
+	    	c .close();
 	    }
 	    catch (SQLException exception) {
 	    	exception.printStackTrace();
 	    }
-		finally {
-			desconecta();
-		}
 		
 		return entradas;
 	}
@@ -145,8 +147,11 @@ public class ObjetoDAO extends BancoSQL {
 		return status;
 	}
 	
-	/** Cria um backup do banco de dados em um arquivo */
+	/** Cria um backup do banco de dados em um arquivo .ebp.
+	 *  @param arquivo - arquivo de backup
+	 *  @throws IOException quando alguma falha de E/S de arquivo é encontrada */
 	public static void criaBackup(File arquivo) throws IOException {
+		
 		ObjectOutputStream outputStream = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(arquivo)));
 		
 		for (Objeto objeto: getObjetos())

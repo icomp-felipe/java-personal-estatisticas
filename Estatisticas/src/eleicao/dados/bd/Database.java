@@ -123,7 +123,7 @@ public enum Database {
 		Connection connection = null;
 		
 		if (dataSource == null)
-			throw new SQLException("x Primeiro inicie a conexão pelo método connect(final String user, final String pass)");
+			throw new SQLException("x Primeiro inicie a conexão pelo método connect()");
 		
 		try {
 			connection = dataSource.getConnection();

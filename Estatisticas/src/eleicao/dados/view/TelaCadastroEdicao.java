@@ -6,6 +6,11 @@ import javax.swing.*;
 import java.awt.event.*;
 import org.jsoup.nodes.*;
 import org.jsoup.select.*;
+
+import com.phill.libs.GraphicsHelper;
+import com.phill.libs.JPaintedPanel;
+import com.phill.libs.ResourceManager;
+
 import eleicao.dados.model.*;
 import eleicao.dados.utils.*;
 
@@ -15,6 +20,9 @@ import eleicao.dados.utils.*;
 public class TelaCadastroEdicao extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
+	
+	private final JPanel painelDados, painelObs, painelEndereco;
+	
 	private JTextField textNome, textEmail, textLogradouro, textNumero, textBairro;
 	private JFormattedTextField textTelRes, textTelCel, textCEP, textCPF, textNasc;
 	private JTextField textComplemento, textUF, textCidade;
@@ -22,60 +30,46 @@ public class TelaCadastroEdicao extends JFrame implements ActionListener {
 	private JTextArea textObs;
 	private Objeto velho;
 	private boolean frameConsulta = false;
-	private JPanel painelDados, painelObs, painelEndereco;
-
-	/** Construtor da tela de edição - carrega os dados de um objeto para a interface */
-	public TelaCadastroEdicao(Objeto objeto) {
-		this("Consulta/Edição");
-		
-		velho = objeto;
-		frameConsulta = true;
-		
-		textNome.setText(objeto.getNome());
-		textEmail.setText(objeto.getEmail());
-		textLogradouro.setText(objeto.getLogradouro());
-		textNumero.setText(objeto.getNumCasa());
-		textBairro.setText(objeto.getBairro());
-		
-		textTelRes.setValue(objeto.getContato01());
-		textTelCel.setValue(objeto.getContato02());
-		textCEP.setValue(objeto.getCEP());
-		textCPF.setValue(objeto.getCPF());
-		textNasc.setText(objeto.getNascimento());
-		
-		textComplemento.setText(objeto.getComplemento());
-		textUF.setText(objeto.getUF());
-		textCidade.setText(objeto.getCidade());
-		
-		textObs.setText(objeto.getDescricao());
-		
-		textCPF.requestFocus();
-	}
 	
-	/** Construtor da tela de cadastro - cria uma interface de cadastro de informações
+	
+	private final ImageIcon loading = new ImageIcon(ResourceManager.getResource("img/loading.gif"));
+
+	/** Construtor da tela de edição - carrega os dados de um objeto para a interface
 	 *  @wbp.parser.constructor */
-	public TelaCadastroEdicao(String usuario) {
-		super("Tela de Cadastro: " + usuario);
+	public TelaCadastroEdicao(Objeto objeto) {
+		super(objeto == null ? "Cadastro de Dados" : "Edição de Dados");
 		
-		Font fonte  = GraphicsHelper.getFont();
-		Color color = GraphicsHelper.getColor();
+		// Inicializando atributos gráficos
+		GraphicsHelper helper = GraphicsHelper.getInstance();
+		GraphicsHelper.setFrameIcon(this,"img/logo.png");
 		
-		setSize(720,480);
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		setLocationRelativeTo(null);
-		setResizable(false);
-		getContentPane().setLayout(null);
+		Dimension dimension = new Dimension(720,480);
+		JPanel    mainPanel = new JPaintedPanel("img/background.png",dimension);
+				
+		mainPanel.setLayout(null);
+		setContentPane(mainPanel);
+		
+		// Recuperando fontes e cores
+		Font  fonte = helper.getFont ();
+		Color color = helper.getColor();
+		
+		// Declaração da janela gráfica
+		painelDados = new JPanel();
+		painelDados.setBorder(helper.getTitledBorder("Dados Pessoais"));
+		painelDados.setBounds(12, 12, 692, 121);
+		painelDados.setLayout(null);
+		mainPanel.add(painelDados);
+		
+		
+		
+		
 		
 		textObs = new JTextArea();
 		textObs.setLineWrap(true);
 		textObs.setFont(fonte);
 		textObs.setForeground(color);
 		
-		painelDados = new JPanel();
-		painelDados.setBorder(GraphicsHelper.getTitledBorder("Dados Pessoais"));
-		painelDados.setBounds(12, 12, 692, 121);
-		getContentPane().add(painelDados);
-		painelDados.setLayout(null);
+		
 		
 		JLabel labelNome = new JLabel("Nome:");
 		labelNome.setFont(fonte);
@@ -94,7 +88,7 @@ public class TelaCadastroEdicao extends JFrame implements ActionListener {
 		labelCPF.setBounds(12, 61, 70, 15);
 		painelDados.add(labelCPF);
 		
-		textCPF = new JFormattedTextField(GraphicsHelper.getMascara("###.###.###-##"));
+		textCPF = new JFormattedTextField(helper.getMascara("###.###.###-##"));
 		textCPF.setFont(fonte);
 		textCPF.setForeground(color);
 		textCPF.setBounds(67, 58, 118, 20);
@@ -105,7 +99,7 @@ public class TelaCadastroEdicao extends JFrame implements ActionListener {
 		labelTelRes.setBounds(229, 61, 70, 15);
 		painelDados.add(labelTelRes);
 		
-		textTelRes = new JFormattedTextField(GraphicsHelper.getMascara("(##) ####-####"));
+		textTelRes = new JFormattedTextField(helper.getMascara("(##) ####-####"));
 		textTelRes.setFont(fonte);
 		textTelRes.setForeground(color);
 		textTelRes.setBounds(309, 58, 124, 20);
@@ -116,7 +110,7 @@ public class TelaCadastroEdicao extends JFrame implements ActionListener {
 		labelTelCel.setBounds(464, 61, 70, 15);
 		painelDados.add(labelTelCel);
 		
-		textTelCel = new JFormattedTextField(GraphicsHelper.getMascara("(##) #####-####"));
+		textTelCel = new JFormattedTextField(helper.getMascara("(##) #####-####"));
 		textTelCel.setForeground(color);
 		textTelCel.setFont(fonte);
 		textTelCel.setBounds(539, 58, 141, 20);
@@ -139,16 +133,16 @@ public class TelaCadastroEdicao extends JFrame implements ActionListener {
 		labelNasc.setBounds(464, 90, 124, 15);
 		painelDados.add(labelNasc);
 		
-		textNasc = new JFormattedTextField(GraphicsHelper.getMascara("##/##/####"));
+		textNasc = new JFormattedTextField(helper.getMascara("##/##/####"));
 		textNasc.setForeground(color);
 		textNasc.setFont(fonte);
 		textNasc.setBounds(590, 88, 90, 20);
 		painelDados.add(textNasc);
 		
 		painelEndereco = new JPanel();
-		painelEndereco.setBorder(GraphicsHelper.getTitledBorder("Endereço"));
+		painelEndereco.setBorder(helper.getTitledBorder("Endereço"));
 		painelEndereco.setBounds(12, 145, 692, 121);
-		getContentPane().add(painelEndereco);
+		mainPanel.add(painelEndereco);
 		painelEndereco.setLayout(null);
 		
 		JLabel labelLogradouro = new JLabel("Logradouro:");
@@ -228,7 +222,7 @@ public class TelaCadastroEdicao extends JFrame implements ActionListener {
 		labelCEP.setBounds(417, 87, 43, 15);
 		painelEndereco.add(labelCEP);
 		
-		textCEP = new JFormattedTextField(GraphicsHelper.getMascara("##.###-###"));
+		textCEP = new JFormattedTextField(helper.getMascara("##.###-###"));
 		textCEP.setForeground(color);
 		textCEP.setFont(fonte);
 		textCEP.setBounds(462, 86, 90, 20);
@@ -240,9 +234,9 @@ public class TelaCadastroEdicao extends JFrame implements ActionListener {
 		painelEndereco.add(botaoConsultar);
 		
 		painelObs = new JPanel();
-		painelObs.setBorder(GraphicsHelper.getTitledBorder("Observações"));
+		painelObs.setBorder(helper.getTitledBorder("Observações"));
 		painelObs.setBounds(12, 278, 692, 127);
-		getContentPane().add(painelObs);
+		mainPanel.add(painelObs);
 		painelObs.setLayout(null);
 		
 		JScrollPane scrollObs = new JScrollPane(textObs);
@@ -252,18 +246,56 @@ public class TelaCadastroEdicao extends JFrame implements ActionListener {
 		botaoSair = new JButton("Sair");
 		botaoSair.addActionListener(this);
 		botaoSair.setBounds(426, 417, 85, 25);
-		getContentPane().add(botaoSair);
+		mainPanel.add(botaoSair);
 		
 		botaoLimpar = new JButton("Limpar");
 		botaoLimpar.addActionListener(this);
 		botaoLimpar.setBounds(522, 417, 85, 25);
-		getContentPane().add(botaoLimpar);
+		mainPanel.add(botaoLimpar);
 		
 		botaoSalvar = new JButton("Salvar");
 		botaoSalvar.addActionListener(this);
 		botaoSalvar.setBounds(619, 417, 85, 25);
-		getContentPane().add(botaoSalvar);
+		mainPanel.add(botaoSalvar);
+		
+		
+		
+		setSize(dimension);
+		setResizable(false);
+	    setLocationRelativeTo(null);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		
 		setVisible(true);
+		
+		
+		
+		
+		velho = objeto;
+		frameConsulta = true;
+		
+		textNome.setText(objeto.getNome());
+		textEmail.setText(objeto.getEmail());
+		textLogradouro.setText(objeto.getLogradouro());
+		textNumero.setText(objeto.getNumCasa());
+		textBairro.setText(objeto.getBairro());
+		
+		textTelRes.setValue(objeto.getContato01());
+		textTelCel.setValue(objeto.getContato02());
+		textCEP.setValue(objeto.getCEP());
+		textCPF.setValue(objeto.getCPF());
+		textNasc.setText(objeto.getNascimento());
+		
+		textComplemento.setText(objeto.getComplemento());
+		textUF.setText(objeto.getUF());
+		textCidade.setText(objeto.getCidade());
+		
+		textObs.setText(objeto.getDescricao());
+		
+		textCPF.requestFocus();
+	}
+	
+	public TelaCadastroEdicao() {
+		this(null);
 	}
 
 	/********************* Bloco de Funcionalidades da Interface Gráfica *************************/

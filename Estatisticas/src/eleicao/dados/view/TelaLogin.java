@@ -32,7 +32,7 @@ public class TelaLogin extends JFrame {
 		
 		// Inicializando atributos gráficos
 		GraphicsHelper helper = GraphicsHelper.getInstance();
-		//GraphicsHelper.setFrameIcon(this,"img/logo.png");
+		GraphicsHelper.setFrameIcon(this,"img/logo.png");
 				
 		Dimension dimension = new Dimension(550,300);
 		JPanel    mainPanel = new JPaintedPanel("img/background.png",dimension);
