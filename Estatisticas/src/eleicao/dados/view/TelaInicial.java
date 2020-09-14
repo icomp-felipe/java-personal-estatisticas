@@ -53,7 +53,7 @@ public class TelaInicial extends JFrame {
         
         // Menu Arquivo
         JMenuItem itemArquivoCadastro = new JMenuItem("Cadastro de Dados");
-        itemArquivoCadastro.addActionListener((event) -> new TelaCadastroEdicao(this.login));
+        itemArquivoCadastro.addActionListener((event) -> new TelaCadastroEdicao());
         menuArquivo.add(itemArquivoCadastro);
         
         JMenuItem itemArquivoConsulta = new JMenuItem("Consulta de Dados");

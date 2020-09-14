@@ -4,6 +4,8 @@ import java.awt.*;
 import org.jsoup.*;
 import javax.swing.*;
 import java.awt.event.*;
+import java.io.IOException;
+
 import org.jsoup.nodes.*;
 import org.jsoup.select.*;
 
@@ -21,6 +23,7 @@ public class TelaCadastroEdicao extends JFrame implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 	
+	private final JLabel labelBuscaCEP;
 	private final JPanel painelDados, painelObs, painelEndereco;
 	
 	private JTextField textNome, textEmail, textLogradouro, textNumero, textBairro;
@@ -246,7 +249,7 @@ public class TelaCadastroEdicao extends JFrame implements ActionListener {
 		painelEndereco.add(textCEP);
 		
 		botaoConsultar = new JButton(selectIcon);
-		botaoConsultar.addActionListener(this);
+		botaoConsultar.addActionListener((event) -> action_busca_cep(event));
 		botaoConsultar.setToolTipText("Buscar CEP online");
 		botaoConsultar.setBounds(648, 90, 30, 25);
 		painelEndereco.add(botaoConsultar);
@@ -286,10 +289,11 @@ public class TelaCadastroEdicao extends JFrame implements ActionListener {
 		botaoSalvar.setBounds(674, 418, 30, 25);
 		mainPanel.add(botaoSalvar);
 		
-		JLabel textOBS = new JLabel();
-		textOBS.setFont(fonte);
-		textOBS.setBounds(12, 418, 560, 25);
-		mainPanel.add(textOBS);
+		labelBuscaCEP = new JLabel("Buscando CEP online...", loading, JLabel.LEADING);
+		labelBuscaCEP.setFont(fonte);
+		labelBuscaCEP.setBounds(12, 418, 560, 25);
+		labelBuscaCEP.setVisible(false);
+		mainPanel.add(labelBuscaCEP);
 		
 		setSize(dimension);
 		setResizable(false);
@@ -326,23 +330,72 @@ public class TelaCadastroEdicao extends JFrame implements ActionListener {
 		textCPF.requestFocus();*/
 	}
 	
+
 	public TelaCadastroEdicao() {
 		this(null);
 	}
 
 	/********************* Bloco de Funcionalidades da Interface Gráfica *************************/
 	
-	/** Inicia a consulta de CEP */
-	private void consultar() {
-		@SuppressWarnings("rawtypes")
-		SwingWorker worker = new SwingWorker() {
-			   protected Void doInBackground() throws Exception {
-				   start();
-				   return null;
-			   }
-		};
-		worker.execute();
+	/** Busca na internet o endereço referente ao CEP informado e o preenche nos campos da tela.
+	 *  @param event - botão que gerou o evento (este é ocultado quando o método está em execução para evitar redundâncias de thread) */
+	private void action_busca_cep(ActionEvent event) {
+		
+		// Recuperando o botão gerador do evento
+		JButton button = (JButton) event.getSource();
+		
+		try {
+			
+			// Recuperando o CEP. Caso seja um CEP inválido, é lançado um NullPointerException aqui.
+			String cep = textCEP.getValue().toString();
+			
+			// Como o método 'EnderecoDAO::get' é bloqueante, o coloco dentro de uma thread para não travar a tela
+			Runnable job = () -> {
+				
+				try {
+					
+					// Bloqueando o botão de busca e exibindo o label
+					SwingUtilities.invokeLater(() -> { labelBuscaCEP.setVisible(true); button.setEnabled(false); });
+					
+					// Recuperando o CEP online
+					Endereco endereco = EnderecoDAO.get(cep);
+					
+					// Preenchendo os dados na view
+					textLogradouro.setText(endereco.getLogradouro());
+					textBairro    .setText(endereco.getBairro    ());
+					textCidade    .setText(endereco.getCidade    ());
+					textUF        .setText(endereco.getUF        ());
+					
+				}
+				
+				// NullPointerException pode ser gerado quando o endereço não foi encontrado via 'EnderecoDAO::get'
+				// IOException ocorre quando há algum erro de conexão à internet
+				catch (NullPointerException | IOException exception) { }
+				finally { SwingUtilities.invokeLater(() -> { labelBuscaCEP.setVisible(false); button.setEnabled(true); }); }
+				
+			};
+			
+			// Iniciando a thread
+			Thread buscaCEP = new Thread(job);
+			buscaCEP.setName("Thread do busca CEP online");
+			buscaCEP.start();
+			
+		}
+		
+		// Um NullPointerException é gerado quando o cep não contém todos os dígitos
+		catch (NullPointerException exception) { }
+		
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	/** Limpa os dados da tela */
 	private void limpar() {
@@ -432,43 +485,6 @@ public class TelaCadastroEdicao extends JFrame implements ActionListener {
 		}
 	}
 	
-	/** Prepara a consulta de CEP */
-	private void start() {
-		String CEP = "";
-		try { CEP = textCEP.getValue().toString(); }
-		catch (Exception exception) { AlertDialog.erro("Digite um CEP válido!"); }
-		if (CEP.equals("")) return;
-		getEnderecoCompleto(CEP);
-	}
-	
-	/** Recupera da internet o endereço completo com base em determinado CEP */
-	private void getEnderecoCompleto(String CEP) {
-		try {
-			Document doc = Jsoup.connect("http://www.qualocep.com/busca-cep/" + CEP).timeout(120000).get();
-			String logradouro = doc.select("span[itemprop=streetAddress]").text();
-			String bairro 	  = getBairro(doc.select("td:gt(1)"));
-			String cidade	  = doc.select("span[itemprop=addressLocality]").text();
-			String estado	  = doc.select("span[itemprop=addressRegion]").text();
-			
-			if (logradouro.equals(""))	return;
-			
-			textLogradouro.setText(logradouro);
-			textBairro.setText(bairro);
-			textCidade.setText(cidade);
-			textUF.setText(estado);
-		}
-		catch (Exception exception) {
-			AlertDialog.erro("Não foi possível recuperar o endereço!\nVerifique sua conexão com a Internet");
-		}
-	}
-	
-	/** Recupera um bairro do site */
-	private String getBairro(Elements urlPesquisa) {
-    	for (Element urlBairro: urlPesquisa)
-            return urlBairro.text();
-        return null;
-    }
-	
 	@Override
 	public void actionPerformed(ActionEvent event) {
 		Object source = event.getSource();
@@ -476,7 +492,5 @@ public class TelaCadastroEdicao extends JFrame implements ActionListener {
 			salvar();
 		else if (source == botaoLimpar)
 			limpar();
-		else if (source == botaoConsultar)
-			consultar();
 	}
 }
