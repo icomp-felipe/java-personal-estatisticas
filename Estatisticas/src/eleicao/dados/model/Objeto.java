@@ -7,6 +7,7 @@ import java.util.*;
 /** Classe Objeto - representa o objeto principal do sistema
  *  @author Felipe André Souza da Silva 
  *  @version 1.00, 10/09/2014 */
+@Deprecated
 public class Objeto implements Serializable {
 	
 	/* Atributos da classe */

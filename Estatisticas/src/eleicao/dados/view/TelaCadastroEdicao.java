@@ -1,39 +1,40 @@
 package eleicao.dados.view;
 
 import java.awt.*;
-import org.jsoup.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.io.IOException;
-
-import org.jsoup.nodes.*;
-import org.jsoup.select.*;
+import java.sql.SQLException;
 
 import com.phill.libs.GraphicsHelper;
 import com.phill.libs.JPaintedPanel;
 import com.phill.libs.ResourceManager;
+import com.phill.libs.StringUtils;
+import com.phill.libs.br.CPFTextField;
+import com.phill.libs.gui.AlertDialog;
+import com.phill.libs.time.TimeFormatter;
 
+import eleicao.dados.dao.DadoDAO;
 import eleicao.dados.model.*;
-import eleicao.dados.utils.*;
 
 /** Classe TelaCadastro - contém a interface de cadastro de informações no sistema
  *  @author Felipe André Souza da Silva 
  *  @version 2.00, 16/09/2014 */
-public class TelaCadastroEdicao extends JFrame implements ActionListener {
+public class TelaCadastroEdicao extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	
 	private final JLabel labelBuscaCEP;
 	private final JPanel painelDados, painelEndereco;
+	private final CPFTextField textCPF;
 	
 	private JTextField textNome, textEmail, textLogradouro, textNumero, textBairro;
-	private JFormattedTextField textTelRes, textTelCel, textCEP, textCPF, textNasc;
+	private JFormattedTextField textFixo, textCel, textCEP, textNasc;
 	private JTextField textComplemento, textUF, textCidade;
 	private JButton botaoSalvar, botaoSair, botaoLimpar, botaoConsultar;
 	private JTextArea textObs;
-	private Objeto velho;
-	private boolean frameConsulta = false;
 	
+	private final Dado dado;
 	
 	private final ImageIcon loading = new ImageIcon(ResourceManager.getResource("img/loading.gif"));
 
@@ -43,8 +44,10 @@ public class TelaCadastroEdicao extends JFrame implements ActionListener {
 	
 	/** Construtor da tela de edição - carrega os dados de um objeto para a interface
 	 *  @wbp.parser.constructor */
-	public TelaCadastroEdicao(Objeto objeto) {
-		super(objeto == null ? "Cadastro de Dados" : "Edição de Dados");
+	public TelaCadastroEdicao(Dado dado) {
+		super(dado.isEmpty() ? "Cadastro de Dados" : "Edição de Dados");
+		
+		this.dado = dado;
 		
 		// Inicializando atributos gráficos
 		GraphicsHelper helper = GraphicsHelper.getInstance();
@@ -93,7 +96,7 @@ public class TelaCadastroEdicao extends JFrame implements ActionListener {
 		labelCPF.setBounds(12, 60, 50, 20);
 		painelDados.add(labelCPF);
 		
-		textCPF = new JFormattedTextField(helper.getMascara("###.###.###-##"));
+		textCPF = new CPFTextField();
 		textCPF.setHorizontalAlignment(JFormattedTextField.CENTER);
 		textCPF.setFont(fonte);
 		textCPF.setForeground(color);
@@ -106,12 +109,12 @@ public class TelaCadastroEdicao extends JFrame implements ActionListener {
 		labelTelRes.setBounds(250, 60, 70, 20);
 		painelDados.add(labelTelRes);
 		
-		textTelRes = new JFormattedTextField(helper.getMascara("(##) ####-####"));
-		textTelRes.setHorizontalAlignment(JFormattedTextField.CENTER);
-		textTelRes.setFont(fonte);
-		textTelRes.setForeground(color);
-		textTelRes.setBounds(330, 60, 125, 25);
-		painelDados.add(textTelRes);
+		textFixo = new JFormattedTextField(helper.getMascara("(##) ####-####"));
+		textFixo.setHorizontalAlignment(JFormattedTextField.CENTER);
+		textFixo.setFont(fonte);
+		textFixo.setForeground(color);
+		textFixo.setBounds(330, 60, 125, 25);
+		painelDados.add(textFixo);
 		
 		JLabel labelTelCel = new JLabel("Tel. Cel.:");
 		labelTelCel.setHorizontalAlignment(JLabel.RIGHT);
@@ -119,12 +122,12 @@ public class TelaCadastroEdicao extends JFrame implements ActionListener {
 		labelTelCel.setBounds(465, 60, 65, 20);
 		painelDados.add(labelTelCel);
 		
-		textTelCel = new JFormattedTextField(helper.getMascara("(##) #####-####"));
-		textTelCel.setHorizontalAlignment(JFormattedTextField.CENTER);
-		textTelCel.setForeground(color);
-		textTelCel.setFont(fonte);
-		textTelCel.setBounds(540, 60, 140, 25);
-		painelDados.add(textTelCel);
+		textCel = new JFormattedTextField(helper.getMascara("(##) #####-####"));
+		textCel.setHorizontalAlignment(JFormattedTextField.CENTER);
+		textCel.setForeground(color);
+		textCel.setFont(fonte);
+		textCel.setBounds(540, 60, 140, 25);
+		painelDados.add(textCel);
 		
 		JLabel labelEmail = new JLabel("e-mail:");
 		labelEmail.setHorizontalAlignment(JLabel.RIGHT);
@@ -285,7 +288,7 @@ public class TelaCadastroEdicao extends JFrame implements ActionListener {
 		
 		botaoSalvar = new JButton(saveIcon);
 		botaoSalvar.setToolTipText("Salvar dados");
-		botaoSalvar.addActionListener(this);
+		botaoSalvar.addActionListener((event) -> action_save());
 		botaoSalvar.setBounds(674, 418, 30, 25);
 		mainPanel.add(botaoSalvar);
 		
@@ -300,39 +303,15 @@ public class TelaCadastroEdicao extends JFrame implements ActionListener {
 	    setLocationRelativeTo(null);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		
+		util_load_data();
+		
 		setVisible(true);
 		
-		
-		
-		/*
-		
-		velho = objeto;
-		frameConsulta = true;
-		
-		textNome.setText(objeto.getNome());
-		textEmail.setText(objeto.getEmail());
-		textLogradouro.setText(objeto.getLogradouro());
-		textNumero.setText(objeto.getNumCasa());
-		textBairro.setText(objeto.getBairro());
-		
-		textTelRes.setValue(objeto.getContato01());
-		textTelCel.setValue(objeto.getContato02());
-		textCEP.setValue(objeto.getCEP());
-		textCPF.setValue(objeto.getCPF());
-		textNasc.setText(objeto.getNascimento());
-		
-		textComplemento.setText(objeto.getComplemento());
-		textUF.setText(objeto.getUF());
-		textCidade.setText(objeto.getCidade());
-		
-		textObs.setText(objeto.getDescricao());
-		
-		textCPF.requestFocus();*/
 	}
 	
 
 	public TelaCadastroEdicao() {
-		this(null);
+		this(new Dado());
 	}
 
 	/********************* Bloco de Funcionalidades da Interface Gráfica *************************/
@@ -398,85 +377,55 @@ public class TelaCadastroEdicao extends JFrame implements ActionListener {
 		
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	/** Salva as informações da interface no banco de dados */
-	private void salvar() {
-		try {
-			boolean status;
-			String middle;
-			Objeto novo = getScreenData();
-			if (novo == null)
-				return;
+	private void action_save() {
+		
+		final String title = "Salvando alterações";
+		
+		if (textCPF.isEmpty()) {
 			
-			if (frameConsulta) {
-				status = ObjetoDAO.atualizaObjeto(velho, novo);
-				middle = " atualizadas ";
+			AlertDialog.error(title, "O CPF não pode ser vazio");
+			return;
+			
+		}
+		
+		// Recuperando os dados da tela
+		dado.setNome      (textNome.getText().trim());
+		dado.setCPF       (textCPF .getCPF(true));
+		dado.setFixo      (StringUtils.extractNumbers(textFixo.getText()));
+		dado.setCelular   (StringUtils.extractNumbers(textCel.getText()));
+		dado.setEmail     (textEmail.getText().trim());
+		dado.setNascimento(textNasc .getText());
+		
+		dado.setLogradouro (textLogradouro .getText().trim());
+		dado.setNumero     (textNumero     .getText().trim());
+		dado.setBairro     (textBairro     .getText().trim());
+		dado.setCidade     (textCidade     .getText().trim());
+		dado.setUF         (textUF         .getText().trim());
+		dado.setComplemento(textComplemento.getText().trim());
+		dado.setCEP        (StringUtils.extractNumbers(textCEP.getText()));
+		
+		dado.setObs(textObs.getText().trim());
+		
+		int choice = AlertDialog.dialog("Deseja salvar as alterações?");
+		
+		if (choice == AlertDialog.OK_OPTION) {
+			
+			try {
+				
+				DadoDAO.commit(dado);
+				AlertDialog.info(title, "Dados salvos com sucesso");
+				
 			}
-			else {
-				status = ObjetoDAO.adicionaObjeto(novo);
-				middle = " cadastradas ";
-				action_clear();
+			catch (SQLException exception) {
+				exception.printStackTrace();
+				AlertDialog.error(title, "Falha ao salvar alterações");
 			}
 			
-			if (status)
-				AlertDialog.informativo("Informações"+middle+"com sucesso!");
-			else
-				AlertDialog.erro("Falha ao cadastrar informações!");
 		}
-		catch (Exception exception) {
-			AlertDialog.erro("Falha ao salvar dados!\nVerifique se todos os campos estão preenchidos corretamente!");
-		}
+		
 	}
 	
 	/******************** Métodos Auxiliares ao Controle das Funções *****************************/
-	
-	/** Recupera as informações da interface para o objeto de dados do sistema */
-	private Objeto getScreenData() throws Exception {
-		String cpf = "", tel1 = "", tel2 = "", nasc = "", cep = "";
-		
-		String nome   = textNome.getText();
-		String logra  = textLogradouro.getText();
-		String numer  = textNumero.getText();
-		String bairro = textBairro.getText();
-		String cidade = textCidade.getText();
-		String uf	  = textUF.getText();
-		String compl  = textComplemento.getText();
-		String email  = textEmail.getText();
-		String obsvs  = textObs.getText();
-		
-		try { cpf = textCPF.getValue().toString(); }
-		catch (Exception exception) { }
-		
-		try { tel1 = textTelRes.getValue().toString(); }
-		catch (Exception exception) { }
-		
-		try { tel2   = textTelCel.getValue().toString(); }
-		catch (Exception exception) { }
-		
-		try { cep = textCEP.getValue().toString(); }
-		catch (Exception exception) { }
-		
-		try { nasc = textNasc.getText(); }
-		catch (Exception exception) { }
-		
-		if (!CPFParser.parse(cpf)) { AlertDialog.erro("Digite um CPF válido!"); return null; }
-		
-		Objeto objeto = new Objeto(cpf, nome, nasc, logra, compl, numer, bairro, cidade, uf, cep, tel1, tel2, email, obsvs);
-		return objeto;
-	}
 	
 	/** Limpa os campos de texto de determinado painel de componentes gráficos. */
 	private void util_clear_panel(JPanel painel) {
@@ -496,10 +445,27 @@ public class TelaCadastroEdicao extends JFrame implements ActionListener {
 		
 	}
 	
-	@Override
-	public void actionPerformed(ActionEvent event) {
-		Object source = event.getSource();
-		if (source == botaoSalvar)
-			salvar();
+	private void util_load_data() {
+		
+		textNome .setText (this.dado.getNome());
+		textCPF  .setValue(this.dado.getCPF ());
+		textFixo .setValue(this.dado.getFixo());
+		textCel  .setValue(this.dado.getCelular());
+		textEmail.setText (this.dado.getEmail  ());
+		textNasc .setText (this.dado.getNascimento(TimeFormatter.AWT_DATE));
+		
+		textLogradouro .setText (this.dado.getLogradouro());
+		textNumero     .setText (this.dado.getNumero());
+		textBairro     .setText (this.dado.getBairro());
+		textCidade     .setText (this.dado.getCidade());
+		textUF         .setText (this.dado.getUF ());
+		textComplemento.setText (this.dado.getComplemento());
+		textCEP        .setValue(this.dado.getCEP());
+		
+		textObs.setText(this.dado.getObs());
+		
+		textNome.requestFocus();
+		
 	}
+	
 }
