@@ -24,7 +24,7 @@ public class TelaCadastroEdicao extends JFrame implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	
 	private final JLabel labelBuscaCEP;
-	private final JPanel painelDados, painelObs, painelEndereco;
+	private final JPanel painelDados, painelEndereco;
 	
 	private JTextField textNome, textEmail, textLogradouro, textNumero, textBairro;
 	private JFormattedTextField textTelRes, textTelCel, textCEP, textCPF, textNasc;
@@ -255,7 +255,7 @@ public class TelaCadastroEdicao extends JFrame implements ActionListener {
 		painelEndereco.add(botaoConsultar);
 		
 		// Painel de Observações
-		painelObs = new JPanel();
+		JPanel painelObs = new JPanel();
 		painelObs.setOpaque(false);
 		painelObs.setBorder(helper.getTitledBorder("Observações"));
 		painelObs.setBounds(12, 270, 692, 140);
@@ -279,7 +279,7 @@ public class TelaCadastroEdicao extends JFrame implements ActionListener {
 		
 		botaoLimpar = new JButton(clearIcon);
 		botaoLimpar.setToolTipText("Limpar dados da tela");
-		botaoLimpar.addActionListener(this);
+		botaoLimpar.addActionListener((event) -> action_clear());
 		botaoLimpar.setBounds(632, 418, 30, 25);
 		mainPanel.add(botaoLimpar);
 		
@@ -387,23 +387,30 @@ public class TelaCadastroEdicao extends JFrame implements ActionListener {
 		
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	/** Limpa os dados da tela */
-	private void limpar() {
-		limpaCampos(painelDados);
-		limpaCampos(painelEndereco);
-		textObs.setText(null);
+	/** Limpa os dados da tela. */
+	private void action_clear() {
+		
+		util_clear_panel(painelDados);
+		util_clear_panel(painelEndereco);
+		
+		textObs .setText(null);
 		textNome.requestFocus();
+		
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	/** Salva as informações da interface no banco de dados */
 	private void salvar() {
@@ -421,7 +428,7 @@ public class TelaCadastroEdicao extends JFrame implements ActionListener {
 			else {
 				status = ObjetoDAO.adicionaObjeto(novo);
 				middle = " cadastradas ";
-				limpar();
+				action_clear();
 			}
 			
 			if (status)
@@ -471,9 +478,11 @@ public class TelaCadastroEdicao extends JFrame implements ActionListener {
 		return objeto;
 	}
 	
-	/** Limpa os campos de texto de determinado painel de componentes gráficos */
-	private void limpaCampos(JPanel painel) {
+	/** Limpa os campos de texto de determinado painel de componentes gráficos. */
+	private void util_clear_panel(JPanel painel) {
+		
 		for (int i=0; i< painel.getComponentCount(); i++) {
+			
 			if (painel.getComponent(i) instanceof JTextField) {
 				JTextField component = (JTextField) painel.getComponent(i);
 				component.setText(null);
@@ -482,7 +491,9 @@ public class TelaCadastroEdicao extends JFrame implements ActionListener {
 				JFormattedTextField component = (JFormattedTextField) painel.getComponent(i);
 				component.setText(null);
 			}
+			
 		}
+		
 	}
 	
 	@Override
@@ -490,7 +501,5 @@ public class TelaCadastroEdicao extends JFrame implements ActionListener {
 		Object source = event.getSource();
 		if (source == botaoSalvar)
 			salvar();
-		else if (source == botaoLimpar)
-			limpar();
 	}
 }
