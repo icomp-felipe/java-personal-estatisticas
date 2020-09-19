@@ -6,15 +6,12 @@ import java.awt.event.*;
 import java.io.IOException;
 import java.sql.SQLException;
 
-import com.phill.libs.GraphicsHelper;
-import com.phill.libs.JPaintedPanel;
-import com.phill.libs.ResourceManager;
-import com.phill.libs.StringUtils;
-import com.phill.libs.br.CPFTextField;
-import com.phill.libs.gui.AlertDialog;
-import com.phill.libs.time.TimeFormatter;
+import com.phill.libs.*;
+import com.phill.libs.br.*;
+import com.phill.libs.ui.*;
+import com.phill.libs.time.*;
 
-import eleicao.dados.dao.DadoDAO;
+import eleicao.dados.dao.ClienteDAO;
 import eleicao.dados.model.*;
 
 /** Classe TelaCadastro - contém a interface de cadastro de informações no sistema
@@ -34,7 +31,7 @@ public class TelaCadastroEdicao extends JFrame {
 	private JButton botaoSalvar, botaoSair, botaoLimpar, botaoConsultar;
 	private JTextArea textObs;
 	
-	private final Dado dado;
+	private final Cliente dado;
 	
 	private final ImageIcon loading = new ImageIcon(ResourceManager.getResource("img/loading.gif"));
 
@@ -44,7 +41,7 @@ public class TelaCadastroEdicao extends JFrame {
 	
 	/** Construtor da tela de edição - carrega os dados de um objeto para a interface
 	 *  @wbp.parser.constructor */
-	public TelaCadastroEdicao(Dado dado) {
+	public TelaCadastroEdicao(Cliente dado) {
 		super(dado.isEmpty() ? "Cadastro de Dados" : "Edição de Dados");
 		
 		this.dado = dado;
@@ -57,7 +54,6 @@ public class TelaCadastroEdicao extends JFrame {
 		JPanel    mainPanel = new JPaintedPanel("img/background.png",dimension);
 		
 		Icon selectIcon = ResourceManager.getResizedIcon("icon/zoom.png",20,20);
-		
 		Icon exitIcon  = ResourceManager.getResizedIcon("icon/shutdown.png",20,20);
 		Icon clearIcon = ResourceManager.getResizedIcon("icon/clear.png",20,20);
 		Icon saveIcon  = ResourceManager.getResizedIcon("icon/save.png",20,20);
@@ -109,7 +105,7 @@ public class TelaCadastroEdicao extends JFrame {
 		labelTelRes.setBounds(250, 60, 70, 20);
 		painelDados.add(labelTelRes);
 		
-		textFixo = new JFormattedTextField(helper.getMascara("(##) ####-####"));
+		textFixo = new JFormattedTextField(helper.getMask("(##) ####-####"));
 		textFixo.setHorizontalAlignment(JFormattedTextField.CENTER);
 		textFixo.setFont(fonte);
 		textFixo.setForeground(color);
@@ -122,7 +118,7 @@ public class TelaCadastroEdicao extends JFrame {
 		labelTelCel.setBounds(465, 60, 65, 20);
 		painelDados.add(labelTelCel);
 		
-		textCel = new JFormattedTextField(helper.getMascara("(##) #####-####"));
+		textCel = new JFormattedTextField(helper.getMask("(##) #####-####"));
 		textCel.setHorizontalAlignment(JFormattedTextField.CENTER);
 		textCel.setForeground(color);
 		textCel.setFont(fonte);
@@ -148,7 +144,7 @@ public class TelaCadastroEdicao extends JFrame {
 		labelNasc.setBounds(465, 90, 65, 20);
 		painelDados.add(labelNasc);
 		
-		textNasc = new JFormattedTextField(helper.getMascara("##/##/####"));
+		textNasc = new JFormattedTextField(helper.getMask("##/##/####"));
 		textNasc.setHorizontalAlignment(JFormattedTextField.CENTER);
 		textNasc.setForeground(color);
 		textNasc.setFont(fonte);
@@ -244,7 +240,7 @@ public class TelaCadastroEdicao extends JFrame {
 		labelCEP.setBounds(505, 90, 40, 20);
 		painelEndereco.add(labelCEP);
 		
-		textCEP = new JFormattedTextField(helper.getMascara("##.###-###"));
+		textCEP = new JFormattedTextField(helper.getMask("##.###-###"));
 		textCEP.setHorizontalAlignment(JFormattedTextField.CENTER);
 		textCEP.setForeground(color);
 		textCEP.setFont(fonte);
@@ -311,7 +307,7 @@ public class TelaCadastroEdicao extends JFrame {
 	
 
 	public TelaCadastroEdicao() {
-		this(new Dado());
+		this(new Cliente());
 	}
 
 	/********************* Bloco de Funcionalidades da Interface Gráfica *************************/
@@ -369,24 +365,23 @@ public class TelaCadastroEdicao extends JFrame {
 	/** Limpa os dados da tela. */
 	private void action_clear() {
 		
-		util_clear_panel(painelDados);
-		util_clear_panel(painelEndereco);
+		int choice = AlertDialog.dialog("Deseja mesmo limpar\ntodos os dados da tela?");
 		
-		textObs .setText(null);
-		textNome.requestFocus();
+		if (choice == AlertDialog.OK_OPTION) {
+			
+			util_clear_panel(painelDados);
+			util_clear_panel(painelEndereco);
+			
+			textObs .setText(null);
+			textNome.requestFocus();
+			
+		}
 		
 	}
 	
 	private void action_save() {
 		
 		final String title = "Salvando alterações";
-		
-		if (textCPF.isEmpty()) {
-			
-			AlertDialog.error(title, "O CPF não pode ser vazio");
-			return;
-			
-		}
 		
 		// Recuperando os dados da tela
 		dado.setNome      (textNome.getText().trim());
@@ -406,13 +401,13 @@ public class TelaCadastroEdicao extends JFrame {
 		
 		dado.setObs(textObs.getText().trim());
 		
-		int choice = AlertDialog.dialog("Deseja salvar as alterações?");
+		int choice = AlertDialog.dialog(title,"Deseja salvar as alterações?");
 		
 		if (choice == AlertDialog.OK_OPTION) {
 			
 			try {
 				
-				DadoDAO.commit(dado);
+				ClienteDAO.commit(dado);
 				AlertDialog.info(title, "Dados salvos com sucesso");
 				
 			}
