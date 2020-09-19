@@ -1,32 +1,34 @@
 package eleicao.dados.model;
 
 import java.sql.*;
-import javax.swing.JOptionPane;
-
 import eleicao.dados.bd.Database;
-import eleicao.dados.utils.AlertDialog;
+import com.phill.libs.ui.AlertDialog;
 
 /** Classe ObjetoDAO - faz a ponte entre as classes de usuários Java e os objetos do banco de dados
  *  @author Felipe André Souza da Silva 
  *  @version 1.00, 10/09/2014 */
-public class UsuarioDAO extends BancoSQL {
+public class UsuarioDAO {
 	
 	/** Faz o login no sistema  */
 	public static String tryLogin(Usuario usuario) {
+		
 		String username = null;
-		conecta();
 		
 		try {
-			Statement st = getStatement();
+			
+			Connection c = Database.INSTANCE.getConnection();
+			Statement st = c.createStatement();
 			ResultSet rs = st.executeQuery(usuario.getLoginString());
+			
 			if (rs.next())
 				username = new String(rs.getString(1));
+			
+			st.close();
+			c .close();
+			
 		}
 		catch (SQLException exception) {
 			exception.printStackTrace();
-		}
-		finally {
-			desconecta();
 		}
 
 		return username;
@@ -34,20 +36,20 @@ public class UsuarioDAO extends BancoSQL {
 
 	/** Atualiza a senha do usuário no sistema */
 	public static void changePassword(String newPassword) {
-		conecta();
 		
 		try {
-			Statement st = getStatement();
+			
+			Connection c = Database.INSTANCE.getConnection();
+			Statement st = c.createStatement();
 			st.executeUpdate("UPDATE USUARIO SET USER_PASSWORD=PASSWORD('" + newPassword + "');");
-			AlertDialog.informativo("Senha atualizada com sucesso!");
+			
+			AlertDialog.info("Senha atualizada com sucesso!");
 		}
 		catch (SQLException exception) {
-			AlertDialog.erro("Falha ao trocar senha!\nVerifique a pasta de tracing!");
+			AlertDialog.error("Falha ao trocar senha!\nVerifique a pasta de tracing!");
 			exception.printStackTrace();
 		}
-		finally {
-			desconecta();
-		}
+		
 	}
 
 	/** Troca o login do sistema.
