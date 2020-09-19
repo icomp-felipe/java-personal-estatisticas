@@ -2,6 +2,9 @@ package eleicao.dados.utils;
 
 import java.io.*;
 import java.util.*;
+
+import com.phill.libs.ResourceManager;
+
 import java.text.*;
 
 /** Classe que redireciona uma stream para um arquivo.
