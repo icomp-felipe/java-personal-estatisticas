@@ -5,15 +5,17 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 import com.phill.libs.*;
+import com.phill.libs.ui.*;
 import eleicao.dados.bd.*;
 import eleicao.dados.model.*;
 
 /** Classe TelaLogin - cria um ambiente gráfico para o usuário fazer login no sistema.
  *  @author Felipe André Souza da Silva 
- *  @version 2.5, 11/09/2020 */
+ *  @version 2.6, 19/09/2020 */
 public class TelaLogin extends JFrame {
 
-	private static final long serialVersionUID = 1L;
+	// Serial
+	private static final long serialVersionUID = 6192035759251528292L;
 	
 	private final JTextField textLogin;
 	private final JPasswordField textSenha;
@@ -99,7 +101,7 @@ public class TelaLogin extends JFrame {
 		labelConexaoStatus.setVisible(false);
 		mainPanel.add(labelConexaoStatus);
 		
-		KeyListener listener = (KeyboardAdapter) (event) -> { if (event.getKeyCode() == KeyEvent.VK_ENTER) botaoEntrar.doClick(); };
+		KeyListener listener = (KeyReleasedListener) (event) -> { if (event.getKeyCode() == KeyEvent.VK_ENTER) botaoEntrar.doClick(); };
 		textSenha.addKeyListener(listener);
 		
 		setSize(dimension);
@@ -141,7 +143,7 @@ public class TelaLogin extends JFrame {
 				// Se as credenciais forem inválidas, indico ao usuário...
 				if (user == null) {
 					SwingUtilities.invokeLater(() -> { labelConexaoStatus.setVisible(false); botaoEntrar.setEnabled(true); botaoLimpar.setEnabled(true);} );
-					AlertDialog.erro("Usuário e/ou senha inválidos!");
+					AlertDialog.error("Login","Usuário e/ou senha inválidos!");
 				}
 				
 				// ...caso contrário, prossigo pra tela inicial, após verificar a senha de admin

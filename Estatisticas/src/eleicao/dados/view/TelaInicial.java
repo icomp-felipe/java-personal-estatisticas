@@ -5,10 +5,11 @@ import java.sql.SQLException;
 import java.awt.*;
 import javax.swing.*;
 
-import com.phill.libs.FileChooserHelper;
-import com.phill.libs.gui.AlertDialog;
+import com.phill.libs.*;
+import com.phill.libs.ui.*;
 
 import eleicao.dados.bd.Database;
+import eleicao.dados.dao.ClienteDAO;
 import eleicao.dados.model.*;
 import eleicao.dados.utils.StreamMonitor;
 
@@ -32,7 +33,7 @@ public class TelaInicial extends JFrame {
 		onCreateOptionsMenu();
 		
 		//stderr = new PrintStream(new StreamMonitor()); 
-		System.setErr(stderr);
+		//System.setErr(stderr);
 		
 		setSize(getScreenWidth(),60);
 		setResizable(false);
@@ -172,7 +173,7 @@ public class TelaInicial extends JFrame {
 			this.lastSelectedDir = bkp.getParentFile();
 			
 			// ...verifico se este arquivo pode ser escrito...
-			if (!bkp.canWrite()) {
+			if (!bkp.getParentFile().canWrite()) {
 				
 				AlertDialog.error(title, "O arquivo que você escolheu está numa pasta que não pode ser escrita!\nFavor escolher outra pasta.");
 				return;
@@ -182,11 +183,11 @@ public class TelaInicial extends JFrame {
 			// ...e, por fim, crio o backup em arquivo
 			try {
 				
-				ObjetoDAO.criaBackup(bkp);
+				ClienteDAO.dump(bkp);
 				AlertDialog.info(title, "Backup criado com sucesso!");
 			
 			}
-			catch (IOException exception) {
+			catch (Exception exception) {
 				
 				exception.printStackTrace();
 				AlertDialog.error(title, "Falha ao criar backup");
@@ -220,10 +221,10 @@ public class TelaInicial extends JFrame {
 				
 				try {
 					
-					ObjetoDAO.restauraBackup(bkp);
+					ClienteDAO.restore(bkp);
 					AlertDialog.info(title, "Backup restaurado com sucesso!");
 					
-				} catch (IOException exception) {
+				} catch (Exception exception) {
 					
 					exception.printStackTrace();
 					AlertDialog.error(title, "Falha ao restaurar backup");

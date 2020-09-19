@@ -3,12 +3,12 @@ package eleicao.dados.view;
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
-import com.phill.libs.*;
+import com.phill.libs.ui.*;
 import eleicao.dados.model.*;
 
 /** Classe TelaMudaSenha - contém um diálogo de troca de senha do sistema
  *  @author Felipe André Souza da Silva 
- *  @version 2.5, 11/09/2020 */
+ *  @version 2.6, 19/09/2020 */
 public class TelaMudaSenha extends JFrame {
 
 	private static final long serialVersionUID = 1L;
@@ -73,7 +73,7 @@ public class TelaMudaSenha extends JFrame {
 		botaoSair.setBounds(56, 158, 90, 25);
 		mainPanel.add(botaoSair);
 		
-		KeyListener listener = (KeyboardAdapter) (event) -> { if (event.getKeyCode() == KeyEvent.VK_ENTER) botaoSalvar.doClick(); };
+		KeyListener listener = (KeyReleasedListener) (event) -> { if (event.getKeyCode() == KeyEvent.VK_ENTER) botaoSalvar.doClick(); };
 		textSenhaTwice.addKeyListener(listener);
 		
 		setSize(dimension);
@@ -95,7 +95,7 @@ public class TelaMudaSenha extends JFrame {
 			dispose();
 		}
 		else
-			AlertDialog.erro("Senhas não conferem!");
+			AlertDialog.error("Atualizando senha","Senhas não conferem!");
 		
 	}
 
