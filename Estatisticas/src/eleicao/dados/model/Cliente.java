@@ -5,124 +5,166 @@ import java.util.Arrays;
 
 import org.joda.time.DateTime;
 
+import com.phill.libs.StringUtils;
+import com.phill.libs.br.PhoneNumberUtils;
+import com.phill.libs.table.JTableRowData;
 import com.phill.libs.time.TimeFormatter;
 import com.phill.libs.time.TimeParser;
 
-public class Dado implements Serializable {
+public class Cliente implements JTableRowData, Serializable {
 
 	private static final long serialVersionUID = 4716814927846252980L;
 	
 	private int id;
 	private String nome, cpf, fixo, celular, email;
-	private DateTime nascimento;
+	private DateTime nascimento, insert, update;
 	private String logradouro, numero, bairro, cidade, uf, complemento, cep;
 	private String obs;
 	
 	/************************ Bloco de Setters ****************************/
 	
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setID(final int id) {
+		this.id = id;
 	}
 	
-	public void setCPF(String cpf) {
-		this.cpf = cpf;
+	public void setNome(final String nome) {
+		this.nome = StringUtils.BR.normaliza(nome);
 	}
 	
-	public void setFixo(String fixo) {
-		this.fixo = fixo;
+	public void setCPF(final String cpf) {
+		this.cpf = StringUtils.extractNumbers(cpf);
 	}
 	
-	public void setCelular(String celular) {
-		this.celular = celular;
+	public void setFixo(final String fixo) {
+		this.fixo = StringUtils.extractNumbers(fixo);
 	}
 	
-	public void setEmail(String email) {
+	public void setCelular(final String celular) {
+		this.celular = StringUtils.extractNumbers(celular);
+	}
+	
+	public void setEmail(final String email) {
 		this.email = email;
 	}
 	
-	public void setNascimento(String nascimento) {
+	public void setNascimento(final String nascimento) {
 		this.nascimento = TimeParser.createDate(nascimento);
 	}
 	
-	public void setLogradouro(String logradouro) {
+	public void setLogradouro(final String logradouro) {
 		this.logradouro = logradouro;
 	}
 	
-	public void setNumero(String numero) {
+	public void setNumero(final String numero) {
 		this.numero = numero;
 	}
 	
-	public void setBairro(String bairro) {
+	public void setBairro(final String bairro) {
 		this.bairro = bairro;
 	}
 	
-	public void setCidade(String cidade) {
+	public void setCidade(final String cidade) {
 		this.cidade = cidade;
 	}
 	
-	public void setUF(String uf) {
+	public void setUF(final String uf) {
 		this.uf = uf;
 	}
 	
-	public void setComplemento(String complemento) {
+	public void setComplemento(final String complemento) {
 		this.complemento = complemento;
 	}
 	
-	public void setCEP(String cep) {
-		this.cep = cep;
+	public void setCEP(final String cep) {
+		this.cep = StringUtils.extractNumbers(cep);
 	}
 	
-	public void setObs(String obs) {
+	public void setObs(final String obs) {
 		this.obs = obs;
+	}
+	
+	public void setDataInsert(final String datetime) {
+		this.insert = TimeParser.createDate(datetime);
+	}
+	
+	public void setDataUpdate(final String datetime) {
+		this.update = TimeParser.createDate(datetime);
 	}
 	
 	/************************ Bloco de Getters ****************************/
 	
+	public int getID() {
+		return this.id;
+	}
+	
 	public String getNome() {
-		return nome;
+		return this.nome;
 	}
+	
 	public String getCPF() {
-		return cpf;
+		return this.cpf;
 	}
+	
 	public String getFixo() {
-		return fixo;
+		return this.fixo;
 	}
+	
 	public String getCelular() {
-		return celular;
+		return this.celular;
 	}
+	
 	public String getEmail() {
-		return email;
+		return this.email;
 	}
+	
 	public String getNascimento(TimeFormatter format) {
 		return TimeParser.retrieveDate(format,this.nascimento);
 	}
+	
 	public String getLogradouro() {
-		return logradouro;
+		return this.logradouro;
 	}
+	
 	public String getNumero() {
-		return numero;
+		return this.numero;
 	}
+	
 	public String getBairro() {
-		return bairro;
+		return this.bairro;
 	}
+	
 	public String getCidade() {
-		return cidade;
+		return this.cidade;
 	}
+	
 	public String getUF() {
-		return uf;
+		return this.uf;
 	}
+	
 	public String getComplemento() {
-		return complemento;
+		return this.complemento;
 	}
+	
 	public String getCEP() {
-		return cep;
+		return this.cep;
 	}
+	
 	public String getObs() {
-		return obs;
+		return this.obs;
+	}
+	
+	public String getDataInsert(TimeFormatter format) {
+		return TimeParser.retrieveDate(format,this.insert);
+	}
+	
+	public String getDataUpdate(TimeFormatter format) {
+		return TimeParser.retrieveDate(format,this.update);
 	}
 	
 	
-	
+	public String getEndereco() {
+		return String.format("%s, %s, %s (%s)", this.logradouro, this.numero, this.bairro, this.cidade);
+	}
 	
 	
 	
@@ -132,29 +174,40 @@ public class Dado implements Serializable {
 	}
 
 	public Object[] getInsertFields() {
-		return Arrays.copyOfRange(getUpdateFields(), 0, 14);
+		return Arrays.copyOfRange(getRestoreFields(), 0, 14);
 	}
 	
 	public Object[] getUpdateFields() {
+		return Arrays.copyOfRange(getRestoreFields(), 0, 15);
+	}
+	
+	public Object[] getRestoreFields() {
 		
-		return new Object[] { 
-								this.nome,
-								this.cpf,
-								this.fixo,
-								this.celular,
-								this.email,
-								getNascimento(TimeFormatter.SQL_DATE),
-								this.logradouro,
-								this.numero,
-								this.bairro,
-								this.cidade,
-								this.uf,
-								this.complemento,
-								this.cep,
-								this.obs,
-								this.id
-							};
+		return new Object[] {
+				this.nome,
+				this.cpf,
+				this.fixo,
+				this.celular,
+				this.email,
+				getNascimento(TimeFormatter.SQL_DATE),
+				this.logradouro,
+				this.numero,
+				this.bairro,
+				this.cidade,
+				this.uf,
+				this.complemento,
+				this.cep,
+				this.obs,
+				this.id, // -----------------------------
+				getDataInsert(TimeFormatter.SQL_DATE_TIME),
+				getDataUpdate(TimeFormatter.SQL_DATE_TIME)
+			};
 		
+	}
+
+	@Override
+	public Object[] getRowData() {
+		return new Object[] { this.nome, getEndereco(), PhoneNumberUtils.format(this.celular,true), PhoneNumberUtils.format(this.fixo,true) };
 	}
 
 }
