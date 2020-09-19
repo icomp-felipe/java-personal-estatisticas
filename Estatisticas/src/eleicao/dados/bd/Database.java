@@ -12,7 +12,6 @@ public enum Database {
 	INSTANCE;
 	
 	private ComboPooledDataSource dataSource;
-	//private final String driverClass = "org.mariadb.jdbc.Driver" ;
 	private final String driverClass = "com.mysql.cj.jdbc.Driver";
 	
 	Database() {
@@ -87,7 +86,7 @@ public enum Database {
 	 * @throws SQLException quando houve falha de conexão. */
 	public void test() throws SQLException, IOException {
 		
-		String query = "SELECT COUNT(*) FROM DADOS";
+		String query = "SELECT COUNT(*) FROM CLIENTE";
 		Connection c = Database.INSTANCE.getConnection();
 		Statement st = c.createStatement();
 		ResultSet rs = st.executeQuery(query);
