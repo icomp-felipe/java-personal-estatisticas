@@ -14,7 +14,7 @@ import com.estatisticas.model.*;
 
 /** Classe TelaLogin - cria um ambiente gráfico para o usuário fazer login no sistema.
  *  @author Felipe André Souza da Silva 
- *  @version 3.0, 20/09/2020 */
+ *  @version 3.0, 21/09/2020 */
 public class TelaEstatisticasLogin extends JFrame {
 
 	// Serial

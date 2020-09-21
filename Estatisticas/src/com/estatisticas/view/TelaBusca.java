@@ -8,25 +8,28 @@ import javax.swing.table.*;
 
 import com.estatisticas.dao.*;
 import com.estatisticas.model.*;
+
 import com.phill.libs.*;
 import com.phill.libs.ui.*;
 import com.phill.libs.table.*;
 
-/** Classe TelaBusca - implementa uma interface de busca de informações no banco de dados
- *  @author Felipe André Souza da Silva 
- *  @version 2.00, 20/09/2014 */
+/** Implementa uma interface de busca de informações no banco de dados.
+ *  @author Felipe André - felipeandresouza@hotmail.com
+ *  @version 2.5, 21/09/2020 */
 public class TelaBusca extends JFrame {
 
 	// Serial
 	private static final long serialVersionUID = -1394541735684711242L;
 	
+	// Atributos gráficos
 	private final JTextField textBusca;
 	private final JTable tableResultado;
 	private final LockedTableModel modelo;
 	
+	// Atributos dinâmicos
 	private ArrayList<Cliente> listaClientes;
 
-	/** Inicia a tela de consulta de informações */
+	/** Inicia a tela de consulta de informações. */
 	public TelaBusca() {
 		super("Consulta Registros");
 		
@@ -49,6 +52,7 @@ public class TelaBusca extends JFrame {
 		
 		// Painel Busca
 		JPanel painelBusca = new JPanel();
+		painelBusca.setOpaque(false);
 		painelBusca.setBorder(instance.getTitledBorder("Busca (Nome | Logradouro | Bairro | Cidade | Observações)"));
 		painelBusca.setBounds(12, 12, 1000, 70);
 		painelBusca.setLayout(null);
@@ -106,6 +110,8 @@ public class TelaBusca extends JFrame {
 		setResizable(false);
 		setVisible(true);
 		
+		action_update_table();
+		
 		textBusca.requestFocus();
 		
 	}
@@ -147,37 +153,41 @@ public class TelaBusca extends JFrame {
 		
 	}
 	
-	/** Exclui da base de dados o cliente selecionado na tabela.*/
+	/** Exclui da base de dados o cliente selecionado na tabela. */
 	private void action_delete() {
+		
+		final String title = "Excluindo registro";
 		
 		try {
 			
 			Cliente selecionado = TableUtils.getSelected(tableResultado, listaClientes);
 			
-			int option = AlertDialog.dialog("Você tem certeza que deseja excluir a linha selecionada?");
+			int option = AlertDialog.dialog(title, "Você tem certeza que deseja excluir a linha selecionada?");
 			
 			if (option == AlertDialog.OK_OPTION) {
 				
 				ClienteDAO.remove(selecionado);
 				
-				AlertDialog.info("Linha excluída com sucesso!");
+				AlertDialog.info(title, "Linha excluída com sucesso!");
 				action_update_table();
 				
 			}
 			
 		}
 		catch (ArrayIndexOutOfBoundsException exception) {
-			AlertDialog.error("Excluindo registro", "Selecione uma linha da tabela!");
+			AlertDialog.error(title, "Selecione uma linha da tabela!");
 		}
 		catch (SQLException exception) {
 			exception.printStackTrace();
-			AlertDialog.error("Excluindo registro", "Falha ao excluir registro.");
+			AlertDialog.error(title, "Falha ao excluir registro.");
 		}
 		
 	}
 
-	/** Exibe mais informações de uma entrada da tabela em uma janela dedicada */
+	/** Exibe mais informações de uma entrada da tabela em uma janela dedicada. */
 	private void action_expand() {
+		
+		final String title = "Expandindo registro";
 		
 		try {
 			
@@ -188,12 +198,13 @@ public class TelaBusca extends JFrame {
 			
 		}
 		catch (ArrayIndexOutOfBoundsException exception) {
-			AlertDialog.error("Expandindo registro", "Selecione uma linha da tabela!");
+			AlertDialog.error(title, "Selecione uma linha da tabela!");
 		}
 		catch (SQLException exception) {
 			exception.printStackTrace();
-			AlertDialog.error("Expandindo registro", "Falha ao expandir registro.");
+			AlertDialog.error(title, "Falha ao expandir registro.");
 		}
 		
 	}
+	
 }
