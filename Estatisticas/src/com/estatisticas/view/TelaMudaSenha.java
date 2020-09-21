@@ -6,6 +6,7 @@ import java.awt.event.*;
 import java.sql.SQLException;
 
 import com.phill.libs.ui.*;
+import com.estatisticas.dao.UsuarioDAO;
 import com.estatisticas.model.*;
 
 /** Contém um diálogo de troca de senha do sistema.

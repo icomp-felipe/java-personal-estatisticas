@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 import com.estatisticas.dao.ClienteDAO;
+import com.estatisticas.dao.EnderecoDAO;
 import com.estatisticas.model.*;
 import com.phill.libs.*;
 import com.phill.libs.br.*;

@@ -1,4 +1,4 @@
-package com.estatisticas.model;
+package com.estatisticas.dao;
 
 import java.io.IOException;
 
@@ -7,15 +7,17 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import com.estatisticas.model.Endereco;
+
 /** Contém métodos de busca de um endereço com base em um CEP no webservice 'qualocep'.
  *  @see <a href="http://www.qualocep.com">http://www.qualocep.com</a>
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 1.5, 20/09/2020 */
+ *  @version 2.0, 21/09/2020 */
 public class EnderecoDAO {
 	
 	/** Recupera um endereço de um determinado CEP. 
 	 *  @throws IOException quando algum erro de conexão ao servidor ocorre. */
-	public static Endereco get(String cep) throws IOException {
+	public static Endereco get(final String cep) throws IOException {
 		
 		// Recupera a página de resposta do webservice, com timeout de 10s
 		Document doc = Jsoup.connect("http://www.qualocep.com/busca-cep/" + cep).timeout(10000).get();
@@ -32,8 +34,9 @@ public class EnderecoDAO {
 		return endereco;
 	}
 	
-	/** Recupera um bairro do site. */
-	private static String getBairro(Elements urlPesquisa) {
+	/** Recupera um bairro do site.
+	 *  @return Nome do bairro. */
+	private static String getBairro(final Elements urlPesquisa) {
 		
     	for (Element urlBairro: urlPesquisa)
             return urlBairro.text();

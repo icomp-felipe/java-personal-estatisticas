@@ -1,7 +1,9 @@
 package com.estatisticas.model;
 
 /** Classe auxiliar que contém a modelagem de um endereço.
- *  Útil para recuperação de endereços físicos da web. */
+ *  Útil para recuperação de endereços físicos da web.
+ *  @author Felipe André - felipeandresouza@hotmail.com
+ *  @version 1.5, 20/09/2020 */
 public class Endereco {
 	
 	// Atributos

@@ -1,10 +1,10 @@
-package com.estatisticas.model;
+package com.estatisticas.dao;
 
 import java.sql.*;
 import com.estatisticas.bd.Database;
-import com.estatisticas.dao.UsuarioParser;
+import com.estatisticas.model.Usuario;
 
-/** Classe ObjetoDAO - faz a ponte entre as classes de usuários Java e os objetos do banco de dados
+/** Faz a ponte entre as classes de usuários Java e os objetos do banco de dados.
  *  @author Felipe André - felipeandresouza@hotmail.com
  *  @version 2.0, 20/09/2020 */
 public class UsuarioDAO {

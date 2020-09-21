@@ -9,6 +9,7 @@ import com.phill.libs.*;
 import com.phill.libs.ui.*;
 
 import com.estatisticas.bd.*;
+import com.estatisticas.dao.UsuarioDAO;
 import com.estatisticas.model.*;
 
 /** Classe TelaLogin - cria um ambiente gráfico para o usuário fazer login no sistema.
