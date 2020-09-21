@@ -1,45 +1,65 @@
 package com.estatisticas.view;
 
 import java.io.*;
-import java.sql.SQLException;
+import java.sql.*;
 import java.awt.*;
-import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
-import com.estatisticas.bd.Database;
-import com.estatisticas.dao.ClienteDAO;
-import com.estatisticas.model.*;
-import com.estatisticas.utils.StreamMonitor;
+import javax.swing.*;
+import javax.swing.filechooser.*;
+
 import com.phill.libs.*;
+import com.phill.libs.sys.HostUtils;
 import com.phill.libs.ui.*;
 
-/** Classe TelaInicial - contém a interface principal de acesso às funcionalidades do sistema
- *  @author Felipe André Souza da Silva 
- *  @version 2.00, 15/09/2014 */
+import com.estatisticas.bd.*;
+import com.estatisticas.dao.*;
+import com.estatisticas.model.*;
+import com.estatisticas.utils.*;
+
+/** Contém a interface principal de acesso às funcionalidades do sistema.
+ *  @author Felipe André - felipeandresouza@hotmail.com
+ *  @version 3.0, 21/09/2020 */
 public class TelaInicial extends JFrame {
 	
-	private static final long serialVersionUID = 1L;
+	// Serial
+	private static final long serialVersionUID = 8827494103161618301L;
+
+	// Constantes
+	private final Usuario usuario;
+	private final FileNameExtensionFilter EBP = new FileNameExtensionFilter("Arquivo de Backup (.ebp)","ebp");
+	
+	// Atributos dinâmicos
+	private File lastSelectedDir = FileChooserHelper.HOME_DIRECTORY;
 	private PrintStream stderr;
 	
-	private String login;
-	
-	private File lastSelectedDir = FileChooserHelper.HOME_DIRECTORY;
-
-	public final FileNameExtensionFilter EBP = new FileNameExtensionFilter("Arquivo de Backup (.ebp)","ebp");
-	
-	/** Constrói a janela gráfica */
-	public TelaInicial(String login) {
+	/** Constrói a janela gráfica. */
+	public TelaInicial(final Usuario usuario) {
 		super("Sistema de Manipulação de Dados");
 		
-		this.login = login;
+		// Registrando usuário
+		this.usuario = usuario;
+		
+		// Inicializando atributos gráficos
+		GraphicsHelper.setFrameIcon(this,"img/logo.png");
+		
 		onCreateOptionsMenu();
 		
-		//stderr = new PrintStream(new StreamMonitor()); 
-		//System.setErr(stderr);
+		// Iniciando monitor de exceções
+		/*stderr = new PrintStream(new StreamMonitor()); 
+		System.setErr(stderr);*/
 		
-		setSize(getScreenWidth(),60);
+		// Redirecionando evento de fechamento de janela para o método 'dispose()' garantindo
+		// assim, que o banco de dados seja desconectado sempre ao sair do sistema.
+		addWindowListener(new WindowAdapter() {
+		   public void windowClosing(WindowEvent event) {
+		       dispose();
+		}});
+		
+		setSize(HostUtils.getScreenWidth(),60);
 		setResizable(false);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		
 		setVisible(true);
 	}
@@ -70,7 +90,7 @@ public class TelaInicial extends JFrame {
         menuArquivo.add(itemArquivoLogin);
         
         JMenuItem itemArquivoSenha = new JMenuItem("Mudar senha do sistema");
-        itemArquivoSenha.addActionListener((event) -> new TelaMudaSenha());
+        itemArquivoSenha.addActionListener((event) -> new TelaMudaSenha(this.usuario));
         menuArquivo.add(itemArquivoSenha);
         
         menuArquivo.add(new JSeparator());
@@ -120,7 +140,7 @@ public class TelaInicial extends JFrame {
 			currentLogin = currentLogin.trim();
 			
 			// ...verifico o login informado com a cadastrado, ...
-			if (currentLogin.equals(this.login)) {
+			if (currentLogin.equals(this.usuario.getLogin())) {
 				
 				// ...solicito o novo login, ...
 				String newLogin = AlertDialog.input(title, "Informe o novo login");
@@ -138,7 +158,7 @@ public class TelaInicial extends JFrame {
 						
 						try {
 							
-							UsuarioDAO.changeLogin(newLogin);	this.login = newLogin;
+							UsuarioDAO.changeLogin(newLogin);	this.usuario.setLogin(newLogin);
 							AlertDialog.info(title, "Login alterado com sucesso!");
 							
 						}
@@ -241,22 +261,24 @@ public class TelaInicial extends JFrame {
 	
 	/** Exibe informações legais do software */
 	private void sobre() {
-		AlertDialog.info("Sobre", "Sistema de Gerenciamento de Dados\nversão 2.0");
+		AlertDialog.info("Sobre", "Sistema de Gerenciamento de Dados\nversão 2.0\nBuild 20200921");
 	}
 	
 	/******************** Métodos Auxiliares ao Controle das Funções *****************************/
 	
-	/** Retorna a largura atual da tela em pixels */
-	private int getScreenWidth() {
-	    return Toolkit.getDefaultToolkit().getScreenSize().width;
-	}
-	
 	@Override
 	public void dispose() {
 		
-		try { Database.INSTANCE.disconnect(); }
-		catch (SQLException exception) { }
-		finally { /*stderr.close();*/ super.dispose(); }
+		try {
+			Database.INSTANCE.disconnect();
+		}
+		catch (SQLException exception) {
+			exception.printStackTrace();
+		}
+		finally {
+			/*stderr.close();*/
+			super.dispose();
+		}
 		
 	}
 	
