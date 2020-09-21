@@ -1,50 +1,53 @@
 package com.estatisticas.view;
 
+import java.io.*;
+import java.sql.*;
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
-import java.io.IOException;
-import java.sql.SQLException;
 
-import com.estatisticas.dao.ClienteDAO;
-import com.estatisticas.dao.EnderecoDAO;
-import com.estatisticas.model.*;
 import com.phill.libs.*;
 import com.phill.libs.br.*;
 import com.phill.libs.ui.*;
 import com.phill.libs.time.*;
 
-/** Classe TelaCadastro - contém a interface de cadastro de informações no sistema
- *  @author Felipe André Souza da Silva 
- *  @version 2.00, 16/09/2014 */
+import com.estatisticas.dao.*;
+import com.estatisticas.model.*;
+
+/** Contém a interface de cadastro de informações no sistema.
+ *  @author Felipe André - felipeandresouza@hotmail.com
+ *  @version 2.5, 21/09/2020 */
 public class TelaCadastroEdicao extends JFrame {
 
-	private static final long serialVersionUID = 1L;
+	// Serial
+	private static final long serialVersionUID = -8936733268274359724L;
 	
+	// Atributos gráficos
 	private final JLabel labelBuscaCEP;
 	private final JPanel painelDados, painelEndereco;
 	private final CPFTextField textCPF;
-	
-	private JTextField textNome, textEmail, textLogradouro, textNumero, textBairro;
-	private JFormattedTextField textFixo, textCel, textCEP, textNasc;
-	private JTextField textComplemento, textUF, textCidade;
-	private JButton botaoSalvar, botaoSair, botaoLimpar, botaoConsultar;
-	private JTextArea textObs;
-	
-	private final Cliente dado;
-	
+	private final JTextField textNome, textEmail, textLogradouro, textNumero, textBairro;
+	private final JFormattedTextField textFixo, textCel, textCEP, textNasc;
+	private final JTextField textComplemento, textUF, textCidade;
+	private final JButton botaoSalvar, botaoSair, botaoLimpar, botaoConsultar;
+	private final JTextArea textObs;
 	private final ImageIcon loading = new ImageIcon(ResourceManager.getResource("img/loading.gif"));
 
-	public static void main(String[] args) {
-		new TelaCadastroEdicao();
+	// Constantes
+	private final Cliente cliente;
+	
+	/** Construtor utilizado para a criação de um novo cliente do sistema. */
+	public TelaCadastroEdicao() {
+		this(new Cliente());
 	}
 	
-	/** Construtor da tela de edição - carrega os dados de um objeto para a interface
+	/** Construtor utilizado para edição de um cliente já existente.
+	 *  @param cliente - cliente do sistema
 	 *  @wbp.parser.constructor */
-	public TelaCadastroEdicao(Cliente dado) {
-		super(dado.isEmpty() ? "Cadastro de Dados" : "Edição de Dados");
+	public TelaCadastroEdicao(final Cliente cliente) {
+		super(cliente.isEmpty() ? "Cadastro de Dados" : "Edição de Dados");
 		
-		this.dado = dado;
+		this.cliente = cliente;
 		
 		// Inicializando atributos gráficos
 		GraphicsHelper helper = GraphicsHelper.getInstance();
@@ -53,6 +56,7 @@ public class TelaCadastroEdicao extends JFrame {
 		Dimension dimension = new Dimension(720,480);
 		JPanel    mainPanel = new JPaintedPanel("img/background.png",dimension);
 		
+		// Recuperando ícones
 		Icon selectIcon = ResourceManager.getResizedIcon("icon/zoom.png",20,20);
 		Icon exitIcon  = ResourceManager.getResizedIcon("icon/shutdown.png",20,20);
 		Icon clearIcon = ResourceManager.getResizedIcon("icon/clear.png",20,20);
@@ -305,11 +309,6 @@ public class TelaCadastroEdicao extends JFrame {
 		
 	}
 	
-
-	public TelaCadastroEdicao() {
-		this(new Cliente());
-	}
-
 	/********************* Bloco de Funcionalidades da Interface Gráfica *************************/
 	
 	/** Busca na internet o endereço referente ao CEP informado e o preenche nos campos da tela.
@@ -379,27 +378,28 @@ public class TelaCadastroEdicao extends JFrame {
 		
 	}
 	
+	/** Salva as alterações de dados na base. */
 	private void action_save() {
 		
 		final String title = "Salvando alterações";
 		
 		// Recuperando os dados da tela
-		dado.setNome      (textNome.getText().trim());
-		dado.setCPF       (textCPF .getCPF(true));
-		dado.setFixo      (StringUtils.extractNumbers(textFixo.getText()));
-		dado.setCelular   (StringUtils.extractNumbers(textCel.getText()));
-		dado.setEmail     (textEmail.getText().trim());
-		dado.setNascimento(textNasc .getText());
+		cliente.setNome      (textNome.getText().trim());
+		cliente.setCPF       (textCPF .getCPF(true));
+		cliente.setFixo      (StringUtils.extractNumbers(textFixo.getText()));
+		cliente.setCelular   (StringUtils.extractNumbers(textCel.getText()));
+		cliente.setEmail     (textEmail.getText().trim());
+		cliente.setNascimento(textNasc .getText());
 		
-		dado.setLogradouro (textLogradouro .getText().trim());
-		dado.setNumero     (textNumero     .getText().trim());
-		dado.setBairro     (textBairro     .getText().trim());
-		dado.setCidade     (textCidade     .getText().trim());
-		dado.setUF         (textUF         .getText().trim());
-		dado.setComplemento(textComplemento.getText().trim());
-		dado.setCEP        (StringUtils.extractNumbers(textCEP.getText()));
+		cliente.setLogradouro (textLogradouro .getText().trim());
+		cliente.setNumero     (textNumero     .getText().trim());
+		cliente.setBairro     (textBairro     .getText().trim());
+		cliente.setCidade     (textCidade     .getText().trim());
+		cliente.setUF         (textUF         .getText().trim());
+		cliente.setComplemento(textComplemento.getText().trim());
+		cliente.setCEP        (StringUtils.extractNumbers(textCEP.getText()));
 		
-		dado.setObservacoes(textObs.getText().trim());
+		cliente.setObservacoes(textObs.getText().trim());
 		
 		int choice = AlertDialog.dialog(title,"Deseja salvar as alterações?");
 		
@@ -407,7 +407,7 @@ public class TelaCadastroEdicao extends JFrame {
 			
 			try {
 				
-				ClienteDAO.commit(dado);
+				ClienteDAO.commit(cliente);
 				AlertDialog.info(title, "Dados salvos com sucesso");
 				
 			}
@@ -422,8 +422,9 @@ public class TelaCadastroEdicao extends JFrame {
 	
 	/******************** Métodos Auxiliares ao Controle das Funções *****************************/
 	
-	/** Limpa os campos de texto de determinado painel de componentes gráficos. */
-	private void util_clear_panel(JPanel painel) {
+	/** Limpa os campos de texto de determinado painel de componentes gráficos.
+	 *  @param painel - painel de componentes gráficos */
+	private void util_clear_panel(final JPanel painel) {
 		
 		for (int i=0; i< painel.getComponentCount(); i++) {
 			
@@ -440,24 +441,25 @@ public class TelaCadastroEdicao extends JFrame {
 		
 	}
 	
+	/** Carrega os dados do cliente para os campos da janela. */
 	private void util_load_data() {
 		
-		textNome .setText (this.dado.getNome());
-		textCPF  .setValue(this.dado.getCPF ());
-		textFixo .setValue(this.dado.getFixo());
-		textCel  .setValue(this.dado.getCelular());
-		textEmail.setText (this.dado.getEmail  ());
-		textNasc .setText (this.dado.getNascimento(TimeFormatter.AWT_DATE));
+		textNome .setText (this.cliente.getNome());
+		textCPF  .setValue(this.cliente.getCPF ());
+		textFixo .setValue(this.cliente.getFixo());
+		textCel  .setValue(this.cliente.getCelular());
+		textEmail.setText (this.cliente.getEmail  ());
+		textNasc .setText (this.cliente.getNascimento(TimeFormatter.AWT_DATE));
 		
-		textLogradouro .setText (this.dado.getLogradouro());
-		textNumero     .setText (this.dado.getNumero());
-		textBairro     .setText (this.dado.getBairro());
-		textCidade     .setText (this.dado.getCidade());
-		textUF         .setText (this.dado.getUF ());
-		textComplemento.setText (this.dado.getComplemento());
-		textCEP        .setValue(this.dado.getCEP());
+		textLogradouro .setText (this.cliente.getLogradouro());
+		textNumero     .setText (this.cliente.getNumero());
+		textBairro     .setText (this.cliente.getBairro());
+		textCidade     .setText (this.cliente.getCidade());
+		textUF         .setText (this.cliente.getUF ());
+		textComplemento.setText (this.cliente.getComplemento());
+		textCEP        .setValue(this.cliente.getCEP());
 		
-		textObs.setText(this.dado.getObservacoes());
+		textObs.setText(this.cliente.getObservacoes());
 		
 		textNome.requestFocus();
 		
