@@ -4,6 +4,9 @@ import java.sql.*;
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
+import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 
 import com.phill.libs.*;
 import com.phill.libs.ui.*;
@@ -11,6 +14,7 @@ import com.phill.libs.ui.*;
 import com.estatisticas.bd.*;
 import com.estatisticas.dao.UsuarioDAO;
 import com.estatisticas.model.*;
+import com.estatisticas.utils.Logger;
 
 /** Classe TelaLogin - cria um ambiente gráfico para o usuário fazer login no sistema.
  *  @author Felipe André Souza da Silva 
@@ -27,8 +31,19 @@ public class TelaEstatisticasLogin extends JFrame {
 	private final JButton botaoLimpar, botaoEntrar;
 	private final ImageIcon loading = new ImageIcon(ResourceManager.getResource("img/loading.gif"));
 	
-	/** Construtor da classe TelaEstatisticasLogin - Cria a janela */
-	public static void main(String[] args) {
+	// Logger
+	protected static final Logger logger = new Logger();
+	
+	/** Construtor da classe TelaEstatisticasLogin - Cria a janela 
+	 *  @throws UnsupportedEncodingException */
+	public static void main(String[] args) throws UnsupportedEncodingException {
+		
+		// Iniciando o logger de exceções
+		final String utf8    = StandardCharsets.UTF_8.name();
+		final PrintStream ps = new PrintStream(logger, true, utf8);
+		
+		System.setErr(ps);
+		
 		new TelaEstatisticasLogin();
 	}
 	
@@ -94,7 +109,7 @@ public class TelaEstatisticasLogin extends JFrame {
 		mainPanel.add(botaoLimpar);
 		
 		JButton botaoSair = new JButton("Sair");
-		botaoSair.addActionListener((event) -> dispose());
+		botaoSair.addActionListener((event) -> { logger.dumpToFile(); dispose(); });
 		botaoSair.setBounds(256, 203, 85, 25);
 		getContentPane().add(botaoSair);
 		

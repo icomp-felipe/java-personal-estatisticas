@@ -2,25 +2,22 @@ package com.estatisticas.view;
 
 import java.io.*;
 import java.sql.*;
-import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 
 import javax.swing.*;
 import javax.swing.filechooser.*;
 
 import com.phill.libs.*;
-import com.phill.libs.sys.HostUtils;
 import com.phill.libs.ui.*;
+import com.phill.libs.sys.*;
 
 import com.estatisticas.bd.*;
 import com.estatisticas.dao.*;
 import com.estatisticas.model.*;
-import com.estatisticas.utils.*;
 
 /** Contém a interface principal de acesso às funcionalidades do sistema.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 3.0, 21/09/2020 */
+ *  @version 3.1, 21/09/2020 */
 public class TelaInicial extends JFrame {
 	
 	// Serial
@@ -32,7 +29,6 @@ public class TelaInicial extends JFrame {
 	
 	// Atributos dinâmicos
 	private File lastSelectedDir = FileChooserHelper.HOME_DIRECTORY;
-	private PrintStream stderr;
 	
 	/** Constrói a janela gráfica. */
 	public TelaInicial(final Usuario usuario) {
@@ -45,10 +41,6 @@ public class TelaInicial extends JFrame {
 		GraphicsHelper.setFrameIcon(this,"img/logo.png");
 		
 		onCreateOptionsMenu();
-		
-		// Iniciando monitor de exceções
-		/*stderr = new PrintStream(new StreamMonitor()); 
-		System.setErr(stderr);*/
 		
 		// Redirecionando evento de fechamento de janela para o método 'dispose()' garantindo
 		// assim, que o banco de dados seja desconectado sempre ao sair do sistema.
@@ -276,7 +268,7 @@ public class TelaInicial extends JFrame {
 			exception.printStackTrace();
 		}
 		finally {
-			/*stderr.close();*/
+			TelaEstatisticasLogin.logger.dumpToFile();
 			super.dispose();
 		}
 		

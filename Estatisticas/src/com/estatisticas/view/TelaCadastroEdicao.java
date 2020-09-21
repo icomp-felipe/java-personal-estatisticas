@@ -16,7 +16,7 @@ import com.estatisticas.model.*;
 
 /** Contém a interface de cadastro de informações no sistema.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 2.5, 21/09/2020 */
+ *  @version 2.6, 21/09/2020 */
 public class TelaCadastroEdicao extends JFrame {
 
 	// Serial
@@ -483,13 +483,13 @@ public class TelaCadastroEdicao extends JFrame {
 		textEmail.setText (this.cliente.getEmail  ());
 		textNasc .setText (this.cliente.getNascimento(TimeFormatter.AWT_DATE));
 		
-		textLogradouro .setText (this.cliente.getLogradouro());
-		textNumero     .setText (this.cliente.getNumero());
-		textBairro     .setText (this.cliente.getBairro());
-		textCidade     .setText (this.cliente.getCidade());
-		textUF         .setText (this.cliente.getUF ());
+		textLogradouro .setText (this.cliente.getLogradouro ());
+		textNumero     .setText (this.cliente.getNumero     ());
+		textBairro     .setText (this.cliente.getBairro     ());
+		textCidade     .setText (this.cliente.getCidade     ());
+		textUF         .setText (this.cliente.getUF         ());
 		textComplemento.setText (this.cliente.getComplemento());
-		textCEP        .setValue(this.cliente.getCEP());
+		textCEP        .setValue(this.cliente.getCEP        ());
 		
 		textObs.setText(this.cliente.getObservacoes());
 		
