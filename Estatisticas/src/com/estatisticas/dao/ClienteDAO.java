@@ -107,6 +107,32 @@ public class ClienteDAO {
 		
 	}
 	
+	/** Verifica se um nome de cliente já foi previamente cadastrado no sistema.
+	 *  @param nome - nome do cliente
+	 *  @return 'true' caso haja registro do nome na base de dados ou 'false' caso contrário (ou haja alguma falha de comunicação com o BD). */
+	public static boolean exists(final String nome) {
+		
+		try {
+			
+			String query = ClienteParser.getExistsQuery(nome);
+			Connection c = Database.INSTANCE.getConnection();
+			Statement st = c.createStatement();
+			
+			ResultSet   rs = st.executeQuery(query);
+			boolean status = rs.next();
+			
+			st.close();
+			c .close();
+			
+			return status;
+		}
+		catch (SQLException exception) {
+			exception.printStackTrace();
+		}
+		
+		return false;
+	}
+	
 	/** Recupera alguns dados de cliente para serem mostrados na tela de busca.
 	 *  @param field - string de busca
 	 *  @throws SQLException quando alguma falha de comunicação com o BD acontece. */

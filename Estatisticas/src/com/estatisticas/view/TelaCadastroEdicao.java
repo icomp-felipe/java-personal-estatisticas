@@ -32,6 +32,7 @@ public class TelaCadastroEdicao extends JFrame {
 	private final JButton botaoSalvar, botaoSair, botaoLimpar, botaoConsultar;
 	private final JTextArea textObs;
 	private final ImageIcon loading = new ImageIcon(ResourceManager.getResource("img/loading.gif"));
+	private final Color yl_dk = new Color(0xE9EF84);
 
 	// Atributos dinâmicos
 	private Cliente cliente;
@@ -84,6 +85,7 @@ public class TelaCadastroEdicao extends JFrame {
 		painelDados.add(labelNome);
 		
 		textNome = new JTextFieldBounded(100);
+		textNome.getDocument().addDocumentListener((DocumentChangeListener) event -> listener_name());
 		textNome.setFont(fonte);
 		textNome.setForeground(color);
 		textNome.setBounds(70, 30, 610, 25);
@@ -424,6 +426,27 @@ public class TelaCadastroEdicao extends JFrame {
 				exception.printStackTrace();
 				AlertDialog.error(title, "Falha ao salvar alterações");
 			}
+			
+		}
+		
+	}
+	
+	/*********************************** Bloco de Listeners **************************************/
+	
+	/** Verifica se o nome digitado já existe no sistema. Apenas na tela de cadastro. */
+	private void listener_name() {
+		
+		// Se é uma tela de cadastro...
+		if (this.cliente.isEmpty()) {
+			
+			// ...recupero o nome digitado, ...
+			final String nome = textNome.getText().trim();
+			
+			// ...verifico duplicidade no sistema e...
+			boolean duplicado = ClienteDAO.exists(nome);
+			
+			// ...atualizo a tela
+			textNome.setBackground(duplicado ? this.yl_dk : Color.WHITE);
 			
 		}
 		

@@ -5,7 +5,7 @@ import com.phill.libs.StringUtils;
 
 /** Contém as classes que montam queries de BD com base nos dados de um {@link Cliente}.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 1.5, 20/09/2020 */
+ *  @version 2.0, 21/09/2020 */
 public class ClienteParser {
 	
 	/** Monta a query de remoção de um cliente da base de dados.
@@ -13,6 +13,13 @@ public class ClienteParser {
 	 *  @return Query de remoção do cliente do BD. */
 	protected static String getDeleteQuery(final Cliente cliente) {
 		return "DELETE FROM CLIENTE WHERE CLIENTE_ID_PK = " + cliente.getID();
+	}
+	
+	/** Monta uma string de verificação de duplicidade de nome de cliente.
+	 *  @param nome - nome do cliente
+	 *  @return Query de verificação de duplicidade de nome de cliente. */
+	protected static String getExistsQuery(final String nome) {
+		return String.format("SELECT * FROM CLIENTE WHERE CLIENTE_NOME = '%s'", nome);
 	}
 	
 	/** Monta a query de inserção de um cliente na base de dados.
