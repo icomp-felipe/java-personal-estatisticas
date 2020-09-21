@@ -1,9 +1,17 @@
 package com.estatisticas.model;
 
+/** Classe auxiliar que contém a modelagem de um endereço.
+ *  Útil para recuperação de endereços físicos da web. */
 public class Endereco {
 	
-	private String logradouro, bairro, cidade, uf;
+	// Atributos
+	private final String logradouro, bairro, cidade, uf;
 	
+	/** Construtor setando parâmetros.
+	 *  @param logradouro - logradouro
+	 *  @param bairro - bairro
+	 *  @param cidade - cidade ou município
+	 *  @param uf - unidade de federação (estado) */
 	public Endereco(final String logradouro, final String bairro, final String cidade, final String uf) {
 		this.logradouro = logradouro;
 		this.bairro = bairro;
@@ -11,20 +19,28 @@ public class Endereco {
 		this.uf = uf;
 	}
 
+	/** Recupera o logradouro do endereço.
+	 *  @return Logradouro do endereço. */
 	public String getLogradouro() {
-		return logradouro;
+		return this.logradouro;
 	}
 
+	/** Recupera o bairro do endereço.
+	 *  @return Bairro do endereço. */
 	public String getBairro() {
-		return bairro;
+		return this.bairro;
 	}
 
+	/** Recupera a cidade ou município do endereço.
+	 *  @return Cidade ou município do endereço. */
 	public String getCidade() {
-		return cidade;
+		return this.cidade;
 	}
 
+	/** Recupera a unidade de federação do endereço (estado).
+	 *  @return Unidade de federação (estado) do endereço. */
 	public String getUF() {
-		return uf;
+		return this.uf;
 	}
 
 }

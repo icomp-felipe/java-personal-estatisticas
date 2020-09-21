@@ -7,10 +7,14 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+/** Contém métodos de busca de um endereço com base em um CEP no webservice 'qualocep'.
+ *  @see <a href="http://www.qualocep.com">http://www.qualocep.com</a>
+ *  @author Felipe André - felipeandresouza@hotmail.com
+ *  @version 1.5, 20/09/2020 */
 public class EnderecoDAO {
 	
 	/** Recupera um endereço de um determinado CEP. 
-	 * @throws IOException */
+	 *  @throws IOException quando algum erro de conexão ao servidor ocorre. */
 	public static Endereco get(String cep) throws IOException {
 		
 		// Recupera a página de resposta do webservice, com timeout de 10s
