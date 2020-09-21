@@ -7,9 +7,9 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.filechooser.*;
 
-import com.phill.libs.*;
 import com.phill.libs.ui.*;
 import com.phill.libs.sys.*;
+import com.phill.libs.files.*;
 
 import com.estatisticas.bd.*;
 import com.estatisticas.dao.*;
@@ -28,7 +28,7 @@ public class TelaInicial extends JFrame {
 	private final FileNameExtensionFilter EBP = new FileNameExtensionFilter("Arquivo de Backup (.ebp)","ebp");
 	
 	// Atributos dinâmicos
-	private File lastSelectedDir = FileChooserHelper.HOME_DIRECTORY;
+	private File lastSelectedDir;
 	
 	/** Constrói a janela gráfica. */
 	public TelaInicial(final Usuario usuario) {
@@ -177,7 +177,7 @@ public class TelaInicial extends JFrame {
 		final String title = "Criando backup";
 		
 		// Recuperando arquivo de backup
-		final File bkp = FileChooserHelper.loadFile(this,this.EBP,"Selecione o arquivo de saída",true,lastSelectedDir);
+		final File bkp = PhillFileUtils.loadFile("Selecione o arquivo de saída", this.EBP, PhillFileUtils.SAVE_DIALOG, lastSelectedDir);
 		
 		// Se algum arquivo foi escolhido...
 		if (bkp != null) {
@@ -218,7 +218,7 @@ public class TelaInicial extends JFrame {
 		final String title = "Restaurando backup";
 				
 		// Recuperando arquivo de backup
-		final File bkp = FileChooserHelper.loadFile(this,this.EBP,"Selecione o arquivo de backup",false,lastSelectedDir);
+		final File bkp = PhillFileUtils.loadFile("Selecione o arquivo de backup", this.EBP, PhillFileUtils.OPEN_DIALOG, lastSelectedDir);
 		
 		// Se algum arquivo foi escolhido...
 		if (bkp != null) {
