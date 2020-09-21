@@ -5,32 +5,34 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 
-import com.estatisticas.bd.*;
-import com.estatisticas.model.*;
 import com.phill.libs.*;
 import com.phill.libs.ui.*;
 
+import com.estatisticas.bd.*;
+import com.estatisticas.model.*;
+
 /** Classe TelaLogin - cria um ambiente gráfico para o usuário fazer login no sistema.
  *  @author Felipe André Souza da Silva 
- *  @version 2.6, 19/09/2020 */
-public class TelaLogin extends JFrame {
+ *  @version 3.0, 20/09/2020 */
+public class TelaEstatisticasLogin extends JFrame {
 
 	// Serial
 	private static final long serialVersionUID = 6192035759251528292L;
 	
+	// Atributos gráficos
 	private final JTextField textLogin;
 	private final JPasswordField textSenha;
 	private final JLabel labelConexaoStatus;
 	private final JButton botaoLimpar, botaoEntrar;
 	private final ImageIcon loading = new ImageIcon(ResourceManager.getResource("img/loading.gif"));
 	
-	/** Construtor da classe TelaLogin - Cria a janela */
+	/** Construtor da classe TelaEstatisticasLogin - Cria a janela */
 	public static void main(String[] args) {
-		new TelaLogin();
+		new TelaEstatisticasLogin();
 	}
 	
-	/** Construtor da classe TelaLogin - constrói a janela gráfica */
-	public TelaLogin() {
+	/** Construtor da classe TelaEstatisticasLogin - constrói a janela gráfica */
+	public TelaEstatisticasLogin() {
 		super("Tela de Login");
 		
 		// Inicializando atributos gráficos
@@ -66,7 +68,6 @@ public class TelaLogin extends JFrame {
 		textLogin.setForeground(color);
 		textLogin.setToolTipText("Digite aqui seu login");
 		textLogin.setBounds(341, 75, 193, 24);
-		textLogin.setColumns(10);
 		mainPanel.add(textLogin);
 		
 		JLabel labelSenha = new JLabel("Senha:");
@@ -113,21 +114,21 @@ public class TelaLogin extends JFrame {
 		setVisible(true);
 	}
 	
-	/** Método para limpar os campos de texto da janela */
+	/** Método para limpar os campos de texto da janela. */
 	private void action_clear() {
 		textLogin.setText(null);
 		textSenha.setText(null);
 		textLogin.requestFocus();
 	}
 	
-	/** Implementa a tentativa de login no sistema */
+	/** Implementa a tentativa de login no sistema. */
 	private void action_login() {
 		
-		new Thread(() -> {
+		Runnable job = () -> {
 		
 			// Recuperando login e senha da view
-			final String login  = textLogin.getText();
-			final String senha  = new String(textSenha.getPassword());
+			final String  login   = textLogin.getText();
+			final String  senha   = new String(textSenha.getPassword());
 			final Usuario usuario = new Usuario(login, senha);
 			
 			util_control_label(false);
@@ -139,18 +140,18 @@ public class TelaLogin extends JFrame {
 				Database.INSTANCE.connect();
 				
 				// Verificando as credenciais no BD
-				String user  = UsuarioDAO.tryLogin(usuario);
+				boolean status = UsuarioDAO.tryLogin(usuario);
 				
 				// Se as credenciais forem inválidas, indico ao usuário...
-				if (user == null) {
-					SwingUtilities.invokeLater(() -> { labelConexaoStatus.setVisible(false); botaoEntrar.setEnabled(true); botaoLimpar.setEnabled(true);} );
+				if (!status) {
+					SwingUtilities.invokeLater(() -> { labelConexaoStatus.setVisible(false); botaoEntrar.setEnabled(true); botaoLimpar.setEnabled(true); });
 					AlertDialog.error("Login","Usuário e/ou senha inválidos!");
 				}
 				
 				// ...caso contrário, prossigo pra tela inicial, após verificar a senha de admin
 				else {
 					util_parse_key(login,senha);
-					new TelaInicial(user);
+					new TelaInicial(usuario);
 					dispose();
 				}
 				
@@ -158,14 +159,20 @@ public class TelaLogin extends JFrame {
 			catch (SQLException exception) {
 				exception.printStackTrace();
 				util_control_label(true);
+				AlertDialog.error("Login", "Falha ao conectar à base de dados!\nO servidor está ativo?");
 			}
 			
 		
-		}).start();
+		};
+		
+		// Iniciando os trabalhos
+		Thread thread = new Thread(job);
+		thread.setName("Thread de login");
+		thread.start();
 		
 	}
 	
-	/** Controla o label de conexão */
+	/** Controla a exibição do label de conexão. */
 	private void util_control_label(boolean falha) {
 		
 		SwingUtilities.invokeLater(() -> {
@@ -197,7 +204,7 @@ public class TelaLogin extends JFrame {
 	private void util_parse_key(String login, String key) {
 		if (login.equals("admin") && key.equals("admin")) {
 			if (AlertDialog.dialog("É altamente recomendável que você troque sua senha\nDeseja fazer isso agora?") == 0)
-				new TelaMudaSenha();
+				new TelaMudaSenha(new Usuario("admin","admin"));
 		}
 	}
 	
