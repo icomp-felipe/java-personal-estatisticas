@@ -116,56 +116,55 @@ public class TelaInicial extends JFrame {
 
 	/********************* Bloco de Funcionalidades da Interface Gráfica *************************/
 	
-	/** Implementação da tela de troca de login de usuário */
+	/** Implementação da tela de troca de login de usuário. */
 	private void action_login_change() {
 		
 		// Título das janelas de diálogo
 		final String title = "Trocando login";
 		
-		// Solicitando login atual do usuário
-		String currentLogin = AlertDialog.input(title, "Informe o login atual");
+		// Solicitando senha atual do usuário
+		String currentPWD = AlertDialog.password(title, "Informe a senha atual");
 		
-		// Se algum login foi informado...
-		if (currentLogin != null) {
+		// Se alguma senha foi informada...
+		if (currentPWD != null) {
 			
-			// ...aparo as pontas para evitar possíveis erros de entrada, ...
-			currentLogin = currentLogin.trim();
-			
-			// ...verifico o login informado com a cadastrado, ...
-			if (currentLogin.equals(this.usuario.getLogin())) {
+			try {
 				
-				// ...solicito o novo login, ...
-				String newLogin = AlertDialog.input(title, "Informe o novo login");
+				// ...valido as credenciais e, ...
+				boolean status = UsuarioDAO.tryLogin(new Usuario(this.usuario.getLogin(), currentPWD));
 				
-				// ...e, por fim, se o login for válido (não nulo), o atualizo na base de dados
-				if (newLogin != null) {
+				// ...se as credenciais são válidas...
+				if (status) {
 					
-					// aparando as pontas do novo login
-					newLogin = newLogin.trim();
+					// ...solicito o novo login, ...
+					String newLogin = AlertDialog.input(title, "Informe o novo login");
 					
-					if (newLogin.isEmpty())
-						AlertDialog.error(title, "Por favor, informe um login não vazio");
-					
-					else {
+					// ...e, por fim, se o login for válido (não nulo), o atualizo na base de dados
+					if (newLogin != null) {
 						
-						try {
-							
+						// aparando as pontas do novo login
+						newLogin = newLogin.trim();
+						
+						if (newLogin.isEmpty())
+							AlertDialog.error(title, "Por favor, informe um login não vazio");
+						else {
 							UsuarioDAO.changeLogin(newLogin);	this.usuario.setLogin(newLogin);
 							AlertDialog.info(title, "Login alterado com sucesso!");
-							
-						}
-						catch (SQLException exception) {
-							exception.printStackTrace();
-							AlertDialog.error(title, "Falha ao alterar login na base de dados");
 						}
 						
 					}
 					
 				}
 				
+				// Credenciais inválidas
+				else
+					AlertDialog.error(title, "Senha informada não confere com a cadastrada");
+				
 			}
-			else
-				AlertDialog.error(title, "Login informado não confere com o cadastrado");
+			catch (SQLException exception) {
+				exception.printStackTrace();
+				AlertDialog.error(title, "Falha na comunicação com a base de dados");
+			}
 			
 		}
 		

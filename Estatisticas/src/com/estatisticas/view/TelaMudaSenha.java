@@ -12,7 +12,7 @@ import com.estatisticas.model.*;
 
 /** Contém um diálogo de troca de senha do sistema.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 2.0, 21/09/2020 */
+ *  @version 2.5, 21/09/2020 */
 public class TelaMudaSenha extends JFrame {
 
 	// Serial
@@ -23,6 +23,7 @@ public class TelaMudaSenha extends JFrame {
 	
 	// Atributos gráficos
 	private final JPasswordField textSenhaOnce, textSenhaTwice;
+	private JPasswordField textSenhaAtual;
 	
 	/** Constrói a janela gráfica. */
 	public TelaMudaSenha(final Usuario usuario) {
@@ -35,7 +36,7 @@ public class TelaMudaSenha extends JFrame {
 		GraphicsHelper helper = GraphicsHelper.getInstance();
 		GraphicsHelper.setFrameIcon(this,"img/logo.png");
 						
-		Dimension dimension = new Dimension(300,225);
+		Dimension dimension = new Dimension(300,275);
 		JPanel    mainPanel = new JPaintedPanel("img/background.png",dimension);
 						
 		mainPanel.setLayout(null);
@@ -50,9 +51,22 @@ public class TelaMudaSenha extends JFrame {
 		Icon saveIcon  = ResourceManager.getResizedIcon("icon/save.png",20,20);
 		
 		// Declaração da janela gráfica
+		JPanel painelSenhaAtual = new JPanel();
+		painelSenhaAtual.setBorder(helper.getTitledBorder("Digite a senha atual"));
+		painelSenhaAtual.setLayout(null);
+		painelSenhaAtual.setOpaque(false);
+		painelSenhaAtual.setBounds(12, 12, 272, 60);
+		mainPanel.add(painelSenhaAtual);
+		
+		textSenhaAtual = new JPasswordField();
+		textSenhaAtual.setFont(fonte);
+		textSenhaAtual.setForeground(color);
+		textSenhaAtual.setBounds(12, 30, 248, 20);
+		painelSenhaAtual.add(textSenhaAtual);
+		
 		JPanel painelSenha = new JPanel();
-		painelSenha.setBorder(helper.getTitledBorder("Digite sua senha"));
-		painelSenha.setBounds(12, 12, 272, 61);
+		painelSenha.setBorder(helper.getTitledBorder("Digite a nova senha"));
+		painelSenha.setBounds(12, 75, 272, 60);
 		painelSenha.setLayout(null);
 		painelSenha.setOpaque(false);
 		mainPanel.add(painelSenha);
@@ -65,8 +79,8 @@ public class TelaMudaSenha extends JFrame {
 		
 		JPanel painelConfirmaSenha = new JPanel();
 		painelConfirmaSenha.setLayout(null);
-		painelConfirmaSenha.setBorder(helper.getTitledBorder("Confirme sua senha"));
-		painelConfirmaSenha.setBounds(12, 85, 272, 61);
+		painelConfirmaSenha.setBorder(helper.getTitledBorder("Confirme a nova senha"));
+		painelConfirmaSenha.setBounds(12, 138, 272, 60);
 		painelConfirmaSenha.setOpaque(false);
 		mainPanel.add(painelConfirmaSenha);
 		
@@ -79,13 +93,13 @@ public class TelaMudaSenha extends JFrame {
 		JButton botaoSalvar = new JButton(saveIcon);
 		botaoSalvar.setToolTipText("Salva alterações");
 		botaoSalvar.addActionListener((event) -> action_update_password());
-		botaoSalvar.setBounds(254, 158, 30, 25);
+		botaoSalvar.setBounds(254, 210, 30, 25);
 		mainPanel.add(botaoSalvar);
 		
 		JButton botaoSair = new JButton(exitIcon);
 		botaoSair.setToolTipText("Sai desta tela");
 		botaoSair.addActionListener((event) -> dispose());
-		botaoSair.setBounds(212, 158, 30, 25);
+		botaoSair.setBounds(212, 210, 30, 25);
 		mainPanel.add(botaoSair);
 		
 		KeyListener listener = (KeyReleasedListener) (event) -> { if (event.getKeyCode() == KeyEvent.VK_ENTER) botaoSalvar.doClick(); };
@@ -104,27 +118,42 @@ public class TelaMudaSenha extends JFrame {
 		
 		final String title = "Atualizando senha";
 		
-		final String firstKey  = new String(textSenhaOnce .getPassword());
-		final String secondKey = new String(textSenhaTwice.getPassword());
+		final String previousKey = new String(textSenhaAtual.getPassword());
+		final String firstKey    = new String(textSenhaOnce .getPassword());
+		final String secondKey   = new String(textSenhaTwice.getPassword());
 		
-		if (firstKey.equals(secondKey)) {
+		try {
 			
-			try {
+			// Validando credenciais
+			boolean status = UsuarioDAO.tryLogin(new Usuario(this.usuario.getLogin(), previousKey));
+			
+			// Se as credenciais forem válidas...
+			if (status) {
 				
-				UsuarioDAO.changePassword(secondKey);	this.usuario.setSenha(secondKey);
-				AlertDialog.info(title, "Senha de acesso atualizada com sucesso!");
-				dispose();
+				// ...verifico a nova senha
+				if (firstKey.equals(secondKey)) {
+							
+					UsuarioDAO.changePassword(secondKey);	this.usuario.setSenha(secondKey);
+					AlertDialog.info(title, "Senha de acesso atualizada com sucesso!");
+					dispose();
+							
+				}
+				else
+					AlertDialog.error(title,"Senhas não conferem!");
 				
 			}
-			catch (SQLException exception) {
-				exception.printStackTrace();
-				AlertDialog.error(title, "Falha ao alterar senha de acesso");
-			}
 			
+			// Credenciais inválidas
+			else
+				AlertDialog.error(title,"Senha informada não confere com a cadastrada");
+				
+				
 		}
-		else
-			AlertDialog.error(title,"Senhas não conferem!");
+		catch (SQLException exception) {
+			exception.printStackTrace();
+			AlertDialog.error(title, "Falha ao alterar senha de acesso");
+		}
 		
 	}
-
+	
 }
