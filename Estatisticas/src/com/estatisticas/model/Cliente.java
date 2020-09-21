@@ -249,8 +249,15 @@ public class Cliente implements JTableRowData, Serializable {
 	/** Recupera o endereço do cliente no formato 'Logradouro, número, bairro (cidade)'.
 	 *  Útil para exibição dos dados na tela de busca.
 	 *  @return Endereço do cliente. */
-	public String getEndereco() {
-		return String.format("%s, %s, %s (%s)", this.logradouro, this.numero, this.bairro, this.cidade);
+	private String getEndereco() {
+		
+		if ( blank(this.logradouro) && blank(this.numero) && blank(this.bairro) && blank(this.cidade) )
+			return "";
+		
+		return String.format("%s, %s, %s (%s)", blank(this.logradouro) ? "<sem logradouro>" : this.logradouro,
+												blank(this.numero    ) ? "<sem numero>"     : this.numero    ,
+												blank(this.bairro    ) ? "<sem bairro>"     : this.bairro    ,
+												blank(this.cidade    ) ? "<sem cidade>"     : this.cidade   );
 	}
 	
 	/** Determina se o cliente atual é novo ou já existente, com base no seu ID.
@@ -300,7 +307,18 @@ public class Cliente implements JTableRowData, Serializable {
 
 	@Override
 	public Object[] getRowData() {
-		return new Object[] { this.nome, getEndereco(), PhoneNumberUtils.format(this.celular,true), PhoneNumberUtils.format(this.fixo,true) };
+		return new Object[] { blank(this.nome) ? "" : this.nome,
+							  getEndereco(),
+							  blank(this.celular) ? "" : PhoneNumberUtils.format(this.celular,true),
+							  blank(this.fixo   ) ? "" : PhoneNumberUtils.format(this.fixo   ,true)
+							};
+	}
+	
+	/** Verifica se uma string é vazia ou nula.
+	 *  @param string - string
+	 *  @return 'true' se a string é vazia ou nula ou 'false' caso contrário. */
+	private boolean blank(final String string) {
+		return (string == null) || (string.isEmpty());
 	}
 
 }
