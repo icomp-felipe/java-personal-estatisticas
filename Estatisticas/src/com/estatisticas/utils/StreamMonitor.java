@@ -1,4 +1,4 @@
-package eleicao.dados.utils;
+package com.estatisticas.utils;
 
 import java.io.*;
 import java.util.*;

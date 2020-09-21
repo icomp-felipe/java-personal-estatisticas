@@ -1,4 +1,4 @@
-package eleicao.dados.view;
+package com.estatisticas.view;
 
 import java.awt.*;
 import javax.swing.*;
@@ -6,13 +6,12 @@ import java.awt.event.*;
 import java.io.IOException;
 import java.sql.SQLException;
 
+import com.estatisticas.dao.ClienteDAO;
+import com.estatisticas.model.*;
 import com.phill.libs.*;
 import com.phill.libs.br.*;
 import com.phill.libs.ui.*;
 import com.phill.libs.time.*;
-
-import eleicao.dados.dao.ClienteDAO;
-import eleicao.dados.model.*;
 
 /** Classe TelaCadastro - contém a interface de cadastro de informações no sistema
  *  @author Felipe André Souza da Silva 

@@ -1,7 +1,8 @@
-package eleicao.dados.model;
+package com.estatisticas.model;
 
 import java.sql.*;
-import eleicao.dados.bd.Database;
+
+import com.estatisticas.bd.Database;
 import com.phill.libs.ui.AlertDialog;
 
 /** Classe ObjetoDAO - faz a ponte entre as classes de usuários Java e os objetos do banco de dados

@@ -1,4 +1,4 @@
-package eleicao.dados.bd;
+package com.estatisticas.bd;
 
 import java.io.*;
 import java.sql.*;

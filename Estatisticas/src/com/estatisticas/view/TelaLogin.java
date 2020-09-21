@@ -1,13 +1,14 @@
-package eleicao.dados.view;
+package com.estatisticas.view;
 
 import java.sql.*;
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
+
+import com.estatisticas.bd.*;
+import com.estatisticas.model.*;
 import com.phill.libs.*;
 import com.phill.libs.ui.*;
-import eleicao.dados.bd.*;
-import eleicao.dados.model.*;
 
 /** Classe TelaLogin - cria um ambiente gráfico para o usuário fazer login no sistema.
  *  @author Felipe André Souza da Silva 

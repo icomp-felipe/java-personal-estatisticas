@@ -1,17 +1,16 @@
-package eleicao.dados.view;
+package com.estatisticas.view;
 
 import java.io.*;
 import java.sql.SQLException;
 import java.awt.*;
 import javax.swing.*;
 
+import com.estatisticas.bd.Database;
+import com.estatisticas.dao.ClienteDAO;
+import com.estatisticas.model.*;
+import com.estatisticas.utils.StreamMonitor;
 import com.phill.libs.*;
 import com.phill.libs.ui.*;
-
-import eleicao.dados.bd.Database;
-import eleicao.dados.dao.ClienteDAO;
-import eleicao.dados.model.*;
-import eleicao.dados.utils.StreamMonitor;
 
 /** Classe TelaInicial - contém a interface principal de acesso às funcionalidades do sistema
  *  @author Felipe André Souza da Silva 

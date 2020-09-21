@@ -1,4 +1,4 @@
-package eleicao.dados.model;
+package com.estatisticas.model;
 
 public class Endereco {
 	

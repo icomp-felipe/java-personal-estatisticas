@@ -1,4 +1,4 @@
-package eleicao.dados.model;
+package com.estatisticas.model;
 
 /** Classe Usuario - representa um usuário do sistema
  *  @author Felipe André Souza da Silva 

@@ -1,7 +1,7 @@
-package eleicao.dados.parser;
+package com.estatisticas.parser;
 
+import com.estatisticas.model.Cliente;
 import com.phill.libs.StringUtils;
-import eleicao.dados.model.Cliente;
 
 public class ClienteParser {
 	

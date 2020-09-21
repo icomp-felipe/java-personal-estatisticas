@@ -1,4 +1,4 @@
-package eleicao.dados.view;
+package com.estatisticas.view;
 
 import java.sql.*;
 import java.awt.*;
@@ -6,12 +6,11 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.table.*;
 
+import com.estatisticas.dao.*;
+import com.estatisticas.model.*;
 import com.phill.libs.*;
 import com.phill.libs.ui.*;
 import com.phill.libs.table.*;
-
-import eleicao.dados.dao.*;
-import eleicao.dados.model.*;
 
 /** Classe TelaBusca - implementa uma interface de busca de informações no banco de dados
  *  @author Felipe André Souza da Silva 

@@ -1,12 +1,12 @@
-package eleicao.dados.dao;
+package com.estatisticas.dao;
 
 import java.io.*;
 import java.sql.*;
 import java.util.*;
 
-import eleicao.dados.bd.Database;
-import eleicao.dados.model.Cliente;
-import eleicao.dados.parser.ClienteParser;
+import com.estatisticas.bd.Database;
+import com.estatisticas.model.Cliente;
+import com.estatisticas.parser.ClienteParser;
 
 public class ClienteDAO {
 	

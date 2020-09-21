@@ -1,10 +1,11 @@
-package eleicao.dados.view;
+package com.estatisticas.view;
 
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
+
+import com.estatisticas.model.*;
 import com.phill.libs.ui.*;
-import eleicao.dados.model.*;
 
 /** Classe TelaMudaSenha - contém um diálogo de troca de senha do sistema
  *  @author Felipe André Souza da Silva 
