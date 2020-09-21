@@ -83,7 +83,7 @@ public class TelaCadastroEdicao extends JFrame {
 		labelNome.setBounds(12, 30, 50, 20);
 		painelDados.add(labelNome);
 		
-		textNome = new JTextField();
+		textNome = new JTextFieldBounded(100);
 		textNome.setFont(fonte);
 		textNome.setForeground(color);
 		textNome.setBounds(70, 30, 610, 25);
@@ -135,7 +135,7 @@ public class TelaCadastroEdicao extends JFrame {
 		labelEmail.setBounds(12, 90, 50, 20);
 		painelDados.add(labelEmail);
 		
-		textEmail = new JTextField();
+		textEmail = new JTextFieldBounded(50);
 		textEmail.setFont(fonte);
 		textEmail.setForeground(color);
 		textEmail.setBounds(70, 90, 385, 25);
@@ -168,7 +168,7 @@ public class TelaCadastroEdicao extends JFrame {
 		labelLogradouro.setBounds(12, 30, 65, 20);
 		painelEndereco.add(labelLogradouro);
 		
-		textLogradouro = new JTextField();
+		textLogradouro = new JTextFieldBounded(100);
 		textLogradouro.setFont(fonte);
 		textLogradouro.setForeground(color);
 		textLogradouro.setBounds(75, 30, 475, 25);
@@ -181,7 +181,7 @@ public class TelaCadastroEdicao extends JFrame {
 		labelNumero.setBounds(565, 30, 45, 20);
 		painelEndereco.add(labelNumero);
 		
-		textNumero = new JTextField();
+		textNumero = new JTextFieldBounded(10);
 		textNumero.setHorizontalAlignment(JTextField.CENTER);
 		textNumero.setFont(fonte);
 		textNumero.setForeground(color);
@@ -194,7 +194,7 @@ public class TelaCadastroEdicao extends JFrame {
 		labelBairro.setBounds(12, 60, 65, 20);
 		painelEndereco.add(labelBairro);
 		
-		textBairro = new JTextField();
+		textBairro = new JTextFieldBounded(100);
 		textBairro.setFont(fonte);
 		textBairro.setForeground(color);
 		textBairro.setBounds(75, 60, 225, 25);
@@ -206,7 +206,7 @@ public class TelaCadastroEdicao extends JFrame {
 		labelCidade.setBounds(310, 60, 70, 20);
 		painelEndereco.add(labelCidade);
 		
-		textCidade = new JTextField();
+		textCidade = new JTextFieldBounded(70);
 		textCidade.setFont(fonte);
 		textCidade.setForeground(color);
 		textCidade.setColumns(10);
@@ -218,7 +218,7 @@ public class TelaCadastroEdicao extends JFrame {
 		labelComplemento.setBounds(12, 90, 65, 20);
 		painelEndereco.add(labelComplemento);
 		
-		textComplemento = new JTextField();
+		textComplemento = new JTextFieldBounded(100);
 		textComplemento.setFont(fonte);
 		textComplemento.setForeground(color);
 		textComplemento.setBounds(75, 90, 420, 25);
@@ -231,7 +231,7 @@ public class TelaCadastroEdicao extends JFrame {
 		labelUF.setBounds(565, 60, 45, 20);
 		painelEndereco.add(labelUF);
 		
-		textUF = new JTextField();
+		textUF = new JTextFieldBounded(2);
 		textUF.setHorizontalAlignment(JTextField.CENTER);
 		textUF.setFont(fonte);
 		textUF.setForeground(color);
