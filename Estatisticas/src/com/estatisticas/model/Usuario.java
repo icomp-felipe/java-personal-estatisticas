@@ -1,27 +1,43 @@
 package com.estatisticas.model;
 
-/** Classe Usuario - representa um usuário do sistema
- *  @author Felipe André Souza da Silva 
- *  @version 1.00, 10/09/2014 */
+/** Modelagem de um usuário do sistema.
+ *  @author Felipe André - felipeandresouza@hotmail.com
+ *  @version 2.0, 20/09/2020 */
 public class Usuario {
 
-	/* Atributos da classe */
+	// Atributos da classe
 	private String login, senha;
 
-	/** Construtor inicializando os atributos */
-	public Usuario(String login, String senha) {
+	/** Construtor inicializando os atributos.
+	 *  @param login - login do sistema
+	 *  @param senha - senha de acesso */
+	public Usuario(final String login, final String senha) {
 		this.login = login;
 		this.senha = senha;
 	}
-
-	/** Recupera uma string de login no banco de dados */
-	public String getLoginString() {
-		return "SELECT * FROM USUARIO WHERE USER_LOGIN_PK='" + login + "' AND USER_PASSWORD=PASSWORD('" + senha + "')";
+	
+	/** Setter do login de acesso.
+	 *  @param login - login acesso do usuário */
+	public void setLogin(final String login) {
+		this.login = login;
 	}
 	
-	/** Recupera uma string de atualização de senha no banco de dados */
-	public String getUpdateString() {
-		return "UPDATE USUARIO SET USER_PASSWORD=PASSWORD('" + senha + "') WHERE USER_LOGIN_PK='" + login + "'";
+	/** Setter da senha de acesso.
+	 *  @param login - senha de acesso do usuário */
+	public void setSenha(final String senha) {
+		this.senha = senha;
+	}
+
+	/** Getter do login de usuário.
+	 *  @return Login de usuário. */
+	public String getLogin() {
+		return this.login;
+	}
+	
+	/** Getter da senha de usuário.
+	 *  @return Senha de usuário. */
+	public String getSenha() {
+		return this.senha;
 	}
 	
 }

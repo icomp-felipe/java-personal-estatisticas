@@ -1,64 +1,57 @@
 package com.estatisticas.model;
 
 import java.sql.*;
-
 import com.estatisticas.bd.Database;
-import com.phill.libs.ui.AlertDialog;
+import com.estatisticas.dao.UsuarioParser;
 
 /** Classe ObjetoDAO - faz a ponte entre as classes de usuários Java e os objetos do banco de dados
- *  @author Felipe André Souza da Silva 
- *  @version 1.00, 10/09/2014 */
+ *  @author Felipe André - felipeandresouza@hotmail.com
+ *  @version 2.0, 20/09/2020 */
 public class UsuarioDAO {
 	
-	/** Faz o login no sistema  */
-	public static String tryLogin(Usuario usuario) {
+	/** Faz o login no sistema.
+	 *  @param usuario - usuário do sistema.
+	 *  @throws SQLException quando acontece algum erro de comunicação com o banco de dados. */
+	public static boolean tryLogin(final Usuario usuario) throws SQLException {
 		
-		String username = null;
+		boolean status;
+		String  query  = UsuarioParser.getLoginString(usuario);
 		
-		try {
+		Connection c = Database.INSTANCE.getConnection();
+		Statement st = c.createStatement();
+		ResultSet rs = st.executeQuery(query);
+		
+		status = rs.next();
+		
+		st.close();
+		c .close();
 			
-			Connection c = Database.INSTANCE.getConnection();
-			Statement st = c.createStatement();
-			ResultSet rs = st.executeQuery(usuario.getLoginString());
-			
-			if (rs.next())
-				username = new String(rs.getString(1));
-			
-			st.close();
-			c .close();
-			
-		}
-		catch (SQLException exception) {
-			exception.printStackTrace();
-		}
-
-		return username;
+		return status;
 	}
-
-	/** Atualiza a senha do usuário no sistema */
-	public static void changePassword(String newPassword) {
-		
-		try {
-			
-			Connection c = Database.INSTANCE.getConnection();
-			Statement st = c.createStatement();
-			st.executeUpdate("UPDATE USUARIO SET USER_PASSWORD=PASSWORD('" + newPassword + "');");
-			
-			AlertDialog.info("Senha atualizada com sucesso!");
-		}
-		catch (SQLException exception) {
-			AlertDialog.error("Falha ao trocar senha!\nVerifique a pasta de tracing!");
-			exception.printStackTrace();
-		}
-		
-	}
-
+	
 	/** Troca o login do sistema.
 	 *  @param newLogin - novo login
-	 *  @throws SQLException quando há alguma falha de conexão com o banco de dados */
+	 *  @throws SQLException quando acontece algum erro de comunicação com o banco de dados. */
 	public static void changeLogin(final String newLogin) throws SQLException {
 		
-		String query = String.format("UPDATE USUARIO SET USER_LOGIN_PK=''",newLogin);
+		String query = UsuarioParser.getUpdateLoginString(newLogin);
+		Connection c = Database.INSTANCE.getConnection();
+		Statement st = c.createStatement();
+		
+		st.executeUpdate(query);
+		
+		st.close();
+		c .close();
+		
+	}
+	
+
+	/** Atualiza a senha do usuário no sistema.
+	 *  @param newPassword - nova senha de acesso
+	 *  @throws SQLException quando acontece algum erro de comunicação com o banco de dados. */
+	public static void changePassword(final String newPassword) throws SQLException {
+		
+		String query = UsuarioParser.getUpdatePasswordString(newPassword);
 		Connection c = Database.INSTANCE.getConnection();
 		Statement st = c.createStatement();
 		
