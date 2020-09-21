@@ -398,7 +398,7 @@ public class TelaCadastroEdicao extends JFrame {
 		dado.setComplemento(textComplemento.getText().trim());
 		dado.setCEP        (StringUtils.extractNumbers(textCEP.getText()));
 		
-		dado.setObs(textObs.getText().trim());
+		dado.setObservacoes(textObs.getText().trim());
 		
 		int choice = AlertDialog.dialog(title,"Deseja salvar as alterações?");
 		
@@ -456,7 +456,7 @@ public class TelaCadastroEdicao extends JFrame {
 		textComplemento.setText (this.dado.getComplemento());
 		textCEP        .setValue(this.dado.getCEP());
 		
-		textObs.setText(this.dado.getObs());
+		textObs.setText(this.dado.getObservacoes());
 		
 		textNome.requestFocus();
 		

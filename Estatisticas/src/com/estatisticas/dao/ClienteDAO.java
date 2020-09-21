@@ -51,7 +51,7 @@ public class ClienteDAO {
 			cliente.setUF         (rs.getString("CLIENTE_UF"         ));
 			cliente.setCEP        (rs.getString("CLIENTE_CEP"        ));
 			cliente.setEmail      (rs.getString("CLIENTE_EMAIL"      ));
-			cliente.setObs        (rs.getString("CLIENTE_OBS"        ));
+			cliente.setObservacoes(rs.getString("CLIENTE_OBS"        ));
 			
 		}
 		
@@ -92,7 +92,7 @@ public class ClienteDAO {
 			cliente.setFixo       (rs.getString("CLIENTE_FIXO"       ));
 			cliente.setCelular    (rs.getString("CLIENTE_CEL"        ));
 			cliente.setEmail      (rs.getString("CLIENTE_EMAIL"      ));
-			cliente.setObs        (rs.getString("CLIENTE_OBS"        ));
+			cliente.setObservacoes(rs.getString("CLIENTE_OBS"        ));
 			cliente.setDataInsert (rs.getString("CLIENTE_DTINSERT"   ));
 			cliente.setDataUpdate (rs.getString("CLIENTE_DTUPDATE"   ));
 
