@@ -5,8 +5,8 @@ import java.sql.*;
 import com.mchange.v2.c3p0.*;
 
 /** Implementa os métodos de acesso ao banco de dados.
- *  @author Felipe André - fass@icomp.ufam.edu.br
- *  @version 1.1, 08/05/2020 */
+ *  @author Felipe André - felipeandresouza@hotmail.com
+ *  @version 1.5, 20/09/2020 */
 public enum Database {
 	
 	INSTANCE;
@@ -43,8 +43,8 @@ public enum Database {
 				
 				dataSource.setDriverClass(driverClass);
 				dataSource.setJdbcUrl(databaseURL);
-				dataSource.setUser("java");
-				dataSource.setPassword("javaApplet");
+				dataSource.setUser("estatisticasApp");
+				dataSource.setPassword("H@McQfTjWnZr4t7w!z%C*F-JaNdRgUkX");	// 256 bit key
 				
 				dataSource.setDebugUnreturnedConnectionStackTraces(true);
 				dataSource.setUnreturnedConnectionTimeout(11);
