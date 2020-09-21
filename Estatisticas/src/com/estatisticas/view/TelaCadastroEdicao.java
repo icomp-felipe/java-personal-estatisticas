@@ -33,8 +33,8 @@ public class TelaCadastroEdicao extends JFrame {
 	private final JTextArea textObs;
 	private final ImageIcon loading = new ImageIcon(ResourceManager.getResource("img/loading.gif"));
 
-	// Constantes
-	private final Cliente cliente;
+	// Atributos dinâmicos
+	private Cliente cliente;
 	
 	/** Construtor utilizado para a criação de um novo cliente do sistema. */
 	public TelaCadastroEdicao() {
@@ -282,7 +282,7 @@ public class TelaCadastroEdicao extends JFrame {
 		
 		botaoLimpar = new JButton(clearIcon);
 		botaoLimpar.setToolTipText("Limpar dados da tela");
-		botaoLimpar.addActionListener((event) -> action_clear());
+		botaoLimpar.addActionListener((event) -> action_clear(false));
 		botaoLimpar.setBounds(632, 418, 30, 25);
 		mainPanel.add(botaoLimpar);
 		
@@ -361,21 +361,26 @@ public class TelaCadastroEdicao extends JFrame {
 		
 	}
 	
-	/** Limpa os dados da tela. */
-	private void action_clear() {
+	/** Limpa os dados da tela.
+	 *  @param skipDialog - ignora ou não o diálogo de confirmação */
+	private void action_clear(final boolean skipDialog) {
 		
-		int choice = AlertDialog.dialog("Deseja mesmo limpar\ntodos os dados da tela?");
-		
-		if (choice == AlertDialog.OK_OPTION) {
+		if (!skipDialog) {
 			
-			util_clear_panel(painelDados);
-			util_clear_panel(painelEndereco);
-			
-			textObs .setText(null);
-			textNome.requestFocus();
+			int choice = AlertDialog.dialog("Deseja mesmo limpar\ntodos os dados da tela?");
+			if (choice != AlertDialog.OK_OPTION)
+				return;
 			
 		}
-		
+			
+		util_clear_panel(painelDados);
+		util_clear_panel(painelEndereco);
+			
+		textObs .setText(null);
+		textNome.requestFocus();
+			
+		this.cliente = new Cliente();
+			
 	}
 	
 	/** Salva as alterações de dados na base. */
@@ -409,6 +414,10 @@ public class TelaCadastroEdicao extends JFrame {
 				
 				ClienteDAO.commit(cliente);
 				AlertDialog.info(title, "Dados salvos com sucesso");
+				
+				// Se a tela era de criação, limpo os dados para uma nova inserção
+				if (cliente.isEmpty())
+					action_clear(true);
 				
 			}
 			catch (SQLException exception) {

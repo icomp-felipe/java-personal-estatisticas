@@ -5,6 +5,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.sql.SQLException;
 
+import com.phill.libs.ResourceManager;
 import com.phill.libs.ui.*;
 import com.estatisticas.dao.UsuarioDAO;
 import com.estatisticas.model.*;
@@ -44,6 +45,10 @@ public class TelaMudaSenha extends JFrame {
 		Font  fonte = helper.getFont ();
 		Color color = helper.getColor();
 		
+		// Recuperando ícones
+		Icon exitIcon  = ResourceManager.getResizedIcon("icon/shutdown.png",20,20);
+		Icon saveIcon  = ResourceManager.getResizedIcon("icon/save.png",20,20);
+		
 		// Declaração da janela gráfica
 		JPanel painelSenha = new JPanel();
 		painelSenha.setBorder(helper.getTitledBorder("Digite sua senha"));
@@ -71,16 +76,16 @@ public class TelaMudaSenha extends JFrame {
 		textSenhaTwice.setBounds(12, 30, 248, 20);
 		painelConfirmaSenha.add(textSenhaTwice);
 		
-		JButton botaoSalvar = new JButton("Salvar");
-		botaoSalvar.setToolTipText("Salvar alterações");
+		JButton botaoSalvar = new JButton(saveIcon);
+		botaoSalvar.setToolTipText("Salva alterações");
 		botaoSalvar.addActionListener((event) -> action_update_password());
-		botaoSalvar.setBounds(152, 158, 90, 25);
+		botaoSalvar.setBounds(254, 158, 30, 25);
 		mainPanel.add(botaoSalvar);
 		
-		JButton botaoSair = new JButton("Sair");
-		botaoSair.setToolTipText("Sair desta tela");
+		JButton botaoSair = new JButton(exitIcon);
+		botaoSair.setToolTipText("Sai desta tela");
 		botaoSair.addActionListener((event) -> dispose());
-		botaoSair.setBounds(56, 158, 90, 25);
+		botaoSair.setBounds(212, 158, 30, 25);
 		mainPanel.add(botaoSair);
 		
 		KeyListener listener = (KeyReleasedListener) (event) -> { if (event.getKeyCode() == KeyEvent.VK_ENTER) botaoSalvar.doClick(); };
