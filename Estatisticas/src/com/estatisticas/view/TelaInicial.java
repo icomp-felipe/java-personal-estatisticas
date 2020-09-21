@@ -4,6 +4,7 @@ import java.io.*;
 import java.sql.SQLException;
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.estatisticas.bd.Database;
 import com.estatisticas.dao.ClienteDAO;
@@ -24,6 +25,8 @@ public class TelaInicial extends JFrame {
 	
 	private File lastSelectedDir = FileChooserHelper.HOME_DIRECTORY;
 
+	public final FileNameExtensionFilter EBP = new FileNameExtensionFilter("Arquivo de Backup (.ebp)","ebp");
+	
 	/** Constrói a janela gráfica */
 	public TelaInicial(String login) {
 		super("Sistema de Manipulação de Dados");
@@ -163,7 +166,7 @@ public class TelaInicial extends JFrame {
 		final String title = "Criando backup";
 		
 		// Recuperando arquivo de backup
-		final File bkp = FileChooserHelper.loadFile(this,Constants.FileTypes.EBP,"Selecione o arquivo de saída",true,lastSelectedDir);
+		final File bkp = FileChooserHelper.loadFile(this,this.EBP,"Selecione o arquivo de saída",true,lastSelectedDir);
 		
 		// Se algum arquivo foi escolhido...
 		if (bkp != null) {
@@ -204,7 +207,7 @@ public class TelaInicial extends JFrame {
 		final String title = "Restaurando backup";
 				
 		// Recuperando arquivo de backup
-		final File bkp = FileChooserHelper.loadFile(this,Constants.FileTypes.EBP,"Selecione o arquivo de backup",false,lastSelectedDir);
+		final File bkp = FileChooserHelper.loadFile(this,this.EBP,"Selecione o arquivo de backup",false,lastSelectedDir);
 		
 		// Se algum arquivo foi escolhido...
 		if (bkp != null) {
