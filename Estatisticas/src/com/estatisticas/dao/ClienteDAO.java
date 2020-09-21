@@ -6,7 +6,6 @@ import java.util.*;
 
 import com.estatisticas.bd.Database;
 import com.estatisticas.model.Cliente;
-import com.estatisticas.parser.ClienteParser;
 
 /** Contém métodos de comunicação entre a aplicação Java e o banco de dados.
  *  @author Felipe André - felipeandresouza@hotmail.com
