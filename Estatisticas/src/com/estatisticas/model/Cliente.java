@@ -8,8 +8,8 @@ import org.joda.time.DateTime;
 import com.phill.libs.StringUtils;
 import com.phill.libs.br.PhoneNumberUtils;
 import com.phill.libs.table.JTableRowData;
-import com.phill.libs.time.TimeFormatter;
-import com.phill.libs.time.TimeParser;
+import com.phill.libs.time.PhillsDateFormatter;
+import com.phill.libs.time.PhillsDateParser;
 
 /** Modelagem da entidade Cliente.
  *  @author Felipe André - felipeandresouza@hotmail.com
@@ -66,9 +66,9 @@ public class Cliente implements JTableRowData, Serializable {
 	
 	/** Setter da data de nascimento. Aqui ela é convertida para um {@link DateTime}.
 	 *  @param nascimento - data de nascimento do cliente, neste programa é geralmente com o formato SQL ou data humana
-	 *  @see TimeParser#createDate(String) */
+	 *  @see PhillsDateParser#createDate(String) */
 	public void setNascimento(final String nascimento) {
-		this.nascimento = TimeParser.createDate(nascimento);
+		this.nascimento = PhillsDateParser.createDate(nascimento);
 	}
 	
 	/** Setter do logradouro.
@@ -122,16 +122,16 @@ public class Cliente implements JTableRowData, Serializable {
 	
 	/** Setter da data de criação do cliente na base de dados.
 	 *  @param datetime - data da criação do cliente no BD. Aqui ela é convertida para um {@link DateTime}.
-	 *  @see TimeParser#createDate(String) */
+	 *  @see PhillsDateParser#createDate(String) */
 	public void setDataInsert(final String datetime) {
-		this.insert = TimeParser.createDate(datetime);
+		this.insert = PhillsDateParser.createDate(datetime);
 	}
 	
 	/** Setter da data da última alteração de dados do cliente na base de dados.
 	 *  @param datetime - data da última alteração de dados do cliente no BD. Aqui ela é convertida para um {@link DateTime}.
-	 *  @see TimeParser#createDate(String) */
+	 *  @see PhillsDateParser#createDate(String) */
 	public void setDataUpdate(final String datetime) {
-		this.update = TimeParser.createDate(datetime);
+		this.update = PhillsDateParser.createDate(datetime);
 	}
 	
 	/************************ Bloco de Getters ****************************/
@@ -175,9 +175,9 @@ public class Cliente implements JTableRowData, Serializable {
 	/** Getter da data de nascimento.
 	 *  @param format - formatação da data de nascimento, consultar tipos de formato.
 	 *  @return Data de nascimento do cliente.
-	 *  @see TimeParser#retrieveDate(TimeFormatter, DateTime) */
-	public String getNascimento(TimeFormatter format) {
-		return TimeParser.retrieveDate(format,this.nascimento);
+	 *  @see PhillsDateParser#retrieveDate(DateTime, PhillsDateFormatter) */
+	public String getNascimento(PhillsDateFormatter format) {
+		return PhillsDateParser.retrieveDate(this.nascimento,format);
 	}
 	
 	/** Getter do logradouro.
@@ -231,17 +231,17 @@ public class Cliente implements JTableRowData, Serializable {
 	/** Getter da data de criação do cliente na base de dados.
 	 *  @param format - formatação da data de nascimento, consultar tipos de formato.
 	 *  @return Data da criação do cliente no BD.
-	 *  @see TimeParser#retrieveDate(TimeFormatter, DateTime) */
-	public String getDataInsert(TimeFormatter format) {
-		return TimeParser.retrieveDate(format,this.insert);
+	 *  @see PhillsDateParser#retrieveDate(DateTime, PhillsDateFormatter) */
+	public String getDataInsert(PhillsDateFormatter format) {
+		return PhillsDateParser.retrieveDate(this.insert,format);
 	}
 	
 	/** Getter da data da última alteração de dados do cliente na base de dados.
 	 *  @param format - formatação da data de nascimento, consultar tipos de formato.
 	 *  @return Data da última alteração de dados do cliente no BD.
-	 *  @see TimeParser#retrieveDate(TimeFormatter, DateTime) */
-	public String getDataUpdate(TimeFormatter format) {
-		return TimeParser.retrieveDate(format,this.update);
+	 *  @see PhillsDateParser#retrieveDate(DateTime, PhillsDateFormatter) */
+	public String getDataUpdate(PhillsDateFormatter format) {
+		return PhillsDateParser.retrieveDate(this.update,format);
 	}
 	
 	/****************** Bloco de Getters Personalizados *******************/
@@ -289,7 +289,7 @@ public class Cliente implements JTableRowData, Serializable {
 				this.fixo,
 				this.celular,
 				this.email,
-				getNascimento(TimeFormatter.SQL_DATE),
+				getNascimento(PhillsDateFormatter.SQL_DATE),
 				this.logradouro,
 				this.numero,
 				this.bairro,
@@ -299,8 +299,8 @@ public class Cliente implements JTableRowData, Serializable {
 				this.cep,
 				this.obs,
 				this.id,
-				getDataInsert(TimeFormatter.SQL_DATE_TIME),
-				getDataUpdate(TimeFormatter.SQL_DATE_TIME)
+				getDataInsert(PhillsDateFormatter.SQL_DATE_TIME),
+				getDataUpdate(PhillsDateFormatter.SQL_DATE_TIME)
 			};
 		
 	}

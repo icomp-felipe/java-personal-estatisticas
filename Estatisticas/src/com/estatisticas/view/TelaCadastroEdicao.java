@@ -58,10 +58,10 @@ public class TelaCadastroEdicao extends JFrame {
 		JPanel    mainPanel = new JPaintedPanel("img/background.png",dimension);
 		
 		// Recuperando ícones
-		Icon selectIcon = ResourceManager.getResizedIcon("icon/zoom.png",20,20);
-		Icon exitIcon  = ResourceManager.getResizedIcon("icon/shutdown.png",20,20);
-		Icon clearIcon = ResourceManager.getResizedIcon("icon/clear.png",20,20);
-		Icon saveIcon  = ResourceManager.getResizedIcon("icon/save.png",20,20);
+		Icon selectIcon = ResourceManager.getIcon("icon/zoom.png",20,20);
+		Icon exitIcon  = ResourceManager.getIcon("icon/shutdown.png",20,20);
+		Icon clearIcon = ResourceManager.getIcon("icon/clear.png",20,20);
+		Icon saveIcon  = ResourceManager.getIcon("icon/save.png",20,20);
 				
 		mainPanel.setLayout(null);
 		setContentPane(mainPanel);
@@ -111,7 +111,7 @@ public class TelaCadastroEdicao extends JFrame {
 		labelTelRes.setBounds(250, 60, 70, 20);
 		painelDados.add(labelTelRes);
 		
-		textFixo = new JFormattedTextField(helper.getMask("(##) ####-####"));
+		textFixo = new JFormattedTextField(GraphicsHelper.getMask("(##) ####-####"));
 		textFixo.setHorizontalAlignment(JFormattedTextField.CENTER);
 		textFixo.setFont(fonte);
 		textFixo.setForeground(color);
@@ -124,7 +124,7 @@ public class TelaCadastroEdicao extends JFrame {
 		labelTelCel.setBounds(465, 60, 65, 20);
 		painelDados.add(labelTelCel);
 		
-		textCel = new JFormattedTextField(helper.getMask("(##) #####-####"));
+		textCel = new JFormattedTextField(GraphicsHelper.getMask("(##) #####-####"));
 		textCel.setHorizontalAlignment(JFormattedTextField.CENTER);
 		textCel.setForeground(color);
 		textCel.setFont(fonte);
@@ -150,7 +150,7 @@ public class TelaCadastroEdicao extends JFrame {
 		labelNasc.setBounds(465, 90, 65, 20);
 		painelDados.add(labelNasc);
 		
-		textNasc = new JFormattedTextField(helper.getMask("##/##/####"));
+		textNasc = new JFormattedTextField(GraphicsHelper.getMask("##/##/####"));
 		textNasc.setHorizontalAlignment(JFormattedTextField.CENTER);
 		textNasc.setForeground(color);
 		textNasc.setFont(fonte);
@@ -246,7 +246,7 @@ public class TelaCadastroEdicao extends JFrame {
 		labelCEP.setBounds(505, 90, 40, 20);
 		painelEndereco.add(labelCEP);
 		
-		textCEP = new JFormattedTextField(helper.getMask("##.###-###"));
+		textCEP = new JFormattedTextField(GraphicsHelper.getMask("##.###-###"));
 		textCEP.setHorizontalAlignment(JFormattedTextField.CENTER);
 		textCEP.setForeground(color);
 		textCEP.setFont(fonte);
@@ -481,7 +481,7 @@ public class TelaCadastroEdicao extends JFrame {
 		textFixo .setValue(this.cliente.getFixo());
 		textCel  .setValue(this.cliente.getCelular());
 		textEmail.setText (this.cliente.getEmail  ());
-		textNasc .setText (this.cliente.getNascimento(TimeFormatter.AWT_DATE));
+		textNasc .setText (this.cliente.getNascimento(PhillsDateFormatter.AWT_DATE));
 		
 		textLogradouro .setText (this.cliente.getLogradouro ());
 		textNumero     .setText (this.cliente.getNumero     ());

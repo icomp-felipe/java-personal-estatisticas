@@ -46,9 +46,9 @@ public class TelaBusca extends JFrame {
 		Color color = instance.getColor();
 		
 		// Recuperando ícones
-		Icon addIcon   = ResourceManager.getResizedIcon("icon/round_plus.png",20,20);
-		Icon clearIcon = ResourceManager.getResizedIcon("icon/clear.png",20,20);
-		Icon exitIcon  = ResourceManager.getResizedIcon("icon/shutdown.png",20,20);
+		Icon addIcon   = ResourceManager.getIcon("icon/round_plus.png",20,20);
+		Icon clearIcon = ResourceManager.getIcon("icon/clear.png",20,20);
+		Icon exitIcon  = ResourceManager.getIcon("icon/shutdown.png",20,20);
 		
 		mainPanel.setLayout(null);
 		setContentPane(mainPanel);

@@ -47,8 +47,8 @@ public class TelaMudaSenha extends JFrame {
 		Color color = helper.getColor();
 		
 		// Recuperando ícones
-		Icon exitIcon  = ResourceManager.getResizedIcon("icon/shutdown.png",20,20);
-		Icon saveIcon  = ResourceManager.getResizedIcon("icon/save.png",20,20);
+		Icon exitIcon  = ResourceManager.getIcon("icon/shutdown.png",20,20);
+		Icon saveIcon  = ResourceManager.getIcon("icon/save.png",20,20);
 		
 		// Declaração da janela gráfica
 		JPanel painelSenhaAtual = new JPanel();
