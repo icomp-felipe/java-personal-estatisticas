@@ -54,7 +54,7 @@ public class TelaCadastroEdicao extends JFrame {
 		GraphicsHelper helper = GraphicsHelper.getInstance();
 		GraphicsHelper.setFrameIcon(this,"img/logo.png");
 		
-		Dimension dimension = new Dimension(720,480);
+		Dimension dimension = new Dimension(740,495);
 		JPanel    mainPanel = new JPaintedPanel("img/background.png",dimension);
 		
 		// Recuperando ícones

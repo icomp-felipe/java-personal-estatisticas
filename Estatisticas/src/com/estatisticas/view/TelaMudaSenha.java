@@ -36,7 +36,7 @@ public class TelaMudaSenha extends JFrame {
 		GraphicsHelper helper = GraphicsHelper.getInstance();
 		GraphicsHelper.setFrameIcon(this,"img/logo.png");
 						
-		Dimension dimension = new Dimension(300,275);
+		Dimension dimension = new Dimension(320,300);
 		JPanel    mainPanel = new JPaintedPanel("img/background.png",dimension);
 						
 		mainPanel.setLayout(null);

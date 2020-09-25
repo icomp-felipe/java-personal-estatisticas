@@ -38,7 +38,7 @@ public class TelaBusca extends JFrame {
 		GraphicsHelper instance = GraphicsHelper.getInstance();
 		GraphicsHelper.setFrameIcon(this,"img/logo.png");
 		
-		Dimension dimension = new Dimension(1024,480);
+		Dimension dimension = new Dimension(1044,495);
 		JPanel    mainPanel = new JPaintedPanel("img/background.png",dimension);
 		
 		// Recuperando fontes e cores

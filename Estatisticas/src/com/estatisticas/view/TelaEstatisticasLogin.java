@@ -55,7 +55,7 @@ public class TelaEstatisticasLogin extends JFrame {
 		GraphicsHelper helper = GraphicsHelper.getInstance();
 		GraphicsHelper.setFrameIcon(this,"img/logo.png");
 				
-		Dimension dimension = new Dimension(550,300);
+		Dimension dimension = new Dimension(570,315);
 		JPanel    mainPanel = new JPaintedPanel("img/background.png",dimension);
 				
 		mainPanel.setLayout(null);

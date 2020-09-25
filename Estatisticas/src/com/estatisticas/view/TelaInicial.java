@@ -25,7 +25,7 @@ public class TelaInicial extends JFrame {
 
 	// Constantes
 	private final Usuario usuario;
-	private final FileNameExtensionFilter EBP = new FileNameExtensionFilter("Arquivo de Backup (.ebp)","ebp");
+	private final FileNameExtensionFilter EBP = new FileNameExtensionFilter("Arquivo de Backup (.ebpx)","ebpx");
 	
 	// Atributos dinâmicos
 	private File lastSelectedDir;
@@ -49,7 +49,7 @@ public class TelaInicial extends JFrame {
 		       dispose();
 		}});
 		
-		setSize(HostUtils.getScreenWidth(),60);
+		setSize(HostUtils.getScreenWidth(),70);
 		setResizable(false);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		
@@ -252,7 +252,7 @@ public class TelaInicial extends JFrame {
 	
 	/** Exibe informações legais do software */
 	private void sobre() {
-		AlertDialog.info("Sobre", "Sistema de Gerenciamento de Dados\nversão 3.0 - build 20200921");
+		AlertDialog.info("Sobre", "Sistema de Gerenciamento de Dados\nversão 3.0 - build 20200925");
 	}
 	
 	/******************** Métodos Auxiliares ao Controle das Funções *****************************/
