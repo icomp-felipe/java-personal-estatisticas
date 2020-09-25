@@ -6,13 +6,13 @@ import com.mchange.v2.c3p0.*;
 
 /** Implementa os métodos de acesso ao banco de dados.
  *  @author Felipe André - felipeandresouza@hotmail.com
- *  @version 1.5, 20/09/2020 */
+ *  @version 1.6, 25/09/2020 */
 public enum Database {
 	
 	INSTANCE;
 	
 	private ComboPooledDataSource dataSource;
-	private final String driverClass = "com.mysql.cj.jdbc.Driver";
+	private final String driverClass = "org.mariadb.jdbc.Driver";
 	
 	Database() {
 		
