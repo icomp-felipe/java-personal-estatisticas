@@ -2,15 +2,16 @@ package com.estatisticas.view;
 
 import java.io.*;
 import java.sql.*;
+import java.awt.Desktop;
 import java.awt.event.*;
 
 import javax.swing.*;
 import javax.swing.filechooser.*;
 
+import com.phill.libs.ResourceManager;
 import com.phill.libs.ui.*;
 import com.phill.libs.sys.*;
 import com.phill.libs.files.*;
-
 import com.estatisticas.bd.*;
 import com.estatisticas.dao.*;
 import com.estatisticas.model.*;
@@ -64,7 +65,7 @@ public class TelaInicial extends JFrame {
 	 	/** Instanciação dos menus */
         JMenu menuArquivo = new JMenu("Arquivo");
         JMenu menuBackups = new JMenu("Backups");
-        JMenu menuAjudas  = new JMenu("Ajuda");
+        JMenu menuAjuda   = new JMenu("Ajuda"  );
         
         // Menu Arquivo
         JMenuItem itemArquivoCadastro = new JMenuItem("Cadastro de Dados");
@@ -101,14 +102,18 @@ public class TelaInicial extends JFrame {
         menuBackups.add(itemBackupRestaura);
         
         // Menu Ajuda
+        JMenuItem itemManual = new JMenuItem("Visualizar Manual");
+        itemManual.addActionListener((event) -> action_manual());
+        menuAjuda.add(itemManual);
+        
         JMenuItem itemAjudaSobre = new JMenuItem("Sobre");
         itemAjudaSobre.addActionListener((event) -> sobre());
-        menuAjudas.add(itemAjudaSobre);
+        menuAjuda.add(itemAjudaSobre);
         
         /** Adicionando os menus na barra de menu */
         menuBar.add(menuArquivo);
         menuBar.add(menuBackups);
-        menuBar.add(menuAjudas);
+        menuBar.add(menuAjuda  );
         
         /** Setando o menu na JFrame */
         setJMenuBar(menuBar);
@@ -246,6 +251,21 @@ public class TelaInicial extends JFrame {
 				
 			}
 			
+		}
+		
+	}
+	
+	/** Abre o manual em PDF */
+	private void action_manual() {
+		
+		try {
+			
+			File manual = ResourceManager.getResourceAsFile("doc/Sistema de Estatísticas.pdf");
+			Desktop.getDesktop().open(manual);
+			
+		}
+		catch (Exception exception) {
+			exception.printStackTrace();
 		}
 		
 	}
