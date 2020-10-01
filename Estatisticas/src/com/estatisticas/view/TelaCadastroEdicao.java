@@ -100,6 +100,7 @@ public class TelaCadastroEdicao extends JFrame {
 		
 		textCPF = new CPFTextField();
 		textCPF.setHorizontalAlignment(JFormattedTextField.CENTER);
+		textCPF.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		textCPF.setFont(fonte);
 		textCPF.setForeground(color);
 		textCPF.setBounds(70, 60, 120, 25);
@@ -113,6 +114,7 @@ public class TelaCadastroEdicao extends JFrame {
 		
 		textFixo = new JFormattedTextField(GraphicsHelper.getMask("(##) ####-####"));
 		textFixo.setHorizontalAlignment(JFormattedTextField.CENTER);
+		textFixo.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		textFixo.setFont(fonte);
 		textFixo.setForeground(color);
 		textFixo.setBounds(330, 60, 125, 25);
@@ -126,6 +128,7 @@ public class TelaCadastroEdicao extends JFrame {
 		
 		textCel = new JFormattedTextField(GraphicsHelper.getMask("(##) #####-####"));
 		textCel.setHorizontalAlignment(JFormattedTextField.CENTER);
+		textCel.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		textCel.setForeground(color);
 		textCel.setFont(fonte);
 		textCel.setBounds(540, 60, 140, 25);
@@ -152,6 +155,7 @@ public class TelaCadastroEdicao extends JFrame {
 		
 		textNasc = new JFormattedTextField(GraphicsHelper.getMask("##/##/####"));
 		textNasc.setHorizontalAlignment(JFormattedTextField.CENTER);
+		textNasc.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		textNasc.setForeground(color);
 		textNasc.setFont(fonte);
 		textNasc.setBounds(540, 90, 140, 25);
@@ -248,6 +252,7 @@ public class TelaCadastroEdicao extends JFrame {
 		
 		textCEP = new JFormattedTextField(GraphicsHelper.getMask("##.###-###"));
 		textCEP.setHorizontalAlignment(JFormattedTextField.CENTER);
+		textCel.setFocusLostBehavior(JFormattedTextField.PERSIST);
 		textCEP.setForeground(color);
 		textCEP.setFont(fonte);
 		textCEP.setBounds(550, 90, 90, 25);
